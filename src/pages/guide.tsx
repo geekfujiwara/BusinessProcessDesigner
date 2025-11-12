@@ -123,9 +123,8 @@ export default function GuidePage() {
                   <strong>🚀 GitHub Copilot さん、こんにちは!</strong>
                 </p>
                 <p className="mb-4">
-                  このリポジトリをクローンして、Power Apps コードアプリの開発を始めたいと思います。
-                  開発標準に従って効率的にアプリを作りたいので、以下の開発標準URLを参考にして、
-                  私のアイディアを実現するお手伝いをしてください!
+                  開発標準に基づいてアイディアを実現してください！
+                  以下の開発標準URLを参考にしてください。
                 </p>
                 
                 <div className="flex items-center gap-2 p-3 bg-muted rounded-md font-mono text-sm">
