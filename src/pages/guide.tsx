@@ -191,7 +191,7 @@ export default function GuidePage() {
                 Code Apps CLI を使用してアプリをビルドし、ローカル環境で起動して動作確認を行います。
               </p>
               <CodeBlock code={`npm run build`} />
-              <CodeBlock code={`pac code run`} />
+              <CodeBlock code={`npm run dev | pac code run && vite`} />
               <div className="space-y-2">
                 <h5 className="font-semibold text-sm">動作確認</h5>
                 <ul className="text-sm text-muted-foreground space-y-1 ml-4">

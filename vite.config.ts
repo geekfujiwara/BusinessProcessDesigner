@@ -13,6 +13,8 @@ export default defineConfig({
   ],
   base: "./",
   server: {
+    port: 3000,
+    host: "::",
     cors: {
       origin: POWER_APPS_CORS_ORIGINS
     }
