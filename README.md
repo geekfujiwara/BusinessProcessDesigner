@@ -2,7 +2,13 @@
 
 **Vite + TypeScript + React** を使用した Power Apps コードアプリ開発用のモダンなスターターテンプレートです。
 
+<img width="1912" height="924" alt="image" src="https://github.com/user-attachments/assets/3942364a-4ed1-49fd-b72b-b1d0b71934b0" />
+
+
 Microsoft Learn Catalog API データをサンプルとして活用し、ダッシュボード、フォーム、ギャラリー、フィルター、カード表示などの実装パターンを紹介します。
+
+
+
 
 ---
 
@@ -18,6 +24,8 @@ Microsoft Learn Catalog API データをサンプルとして活用し、ダッ�
 - **レスポンシブデザイン** - モバイル対応のサイドバーナビゲーション
 - **使い方ガイド** - GitHub Copilot との連携方法を含む詳細なガイド
 
+https://github.com/user-attachments/assets/6dbc4c34-3d23-45a7-afbb-0cd3e71b553e
+
 ---
 
 ## サンプル実装
@@ -31,6 +39,11 @@ Microsoft Learn Catalog API データをサンプルとして活用し、ダッ�
 - ページネーション
 - レスポンシブグリッドレイアウト
 
+<img width="1974" height="1035" alt="image" src="https://github.com/user-attachments/assets/66c8ef26-fa6d-451c-a0c8-333a5f390384" />
+
+<img width="1953" height="686" alt="image" src="https://github.com/user-attachments/assets/39dc9a75-f0d7-4944-91fb-a26092646ff0" />
+
+
 ### 📝 フォーム実装
 
 - モーダルベースのフォーム
@@ -43,23 +56,32 @@ Microsoft Learn Catalog API データをサンプルとして活用し、ダッ�
 - データの集計と可視化
 - カードベースのレイアウト
 
+<img width="1890" height="1068" alt="image" src="https://github.com/user-attachments/assets/5a99c6b2-6814-4568-8ae0-c64644d6b79e" />
+
 ### 🎴 カード表示実装
+
 
 - Learn データを活用したカードコンポーネント
 - バッジとメタデータ表示
 - 外部リンク確認モーダル
 
----
+<img width="1561" height="357" alt="image" src="https://github.com/user-attachments/assets/501d9e8e-48d1-43e6-b362-cbaae9c3d1e6" />
 
-## プリインストールライブラリ
+### 🎯 タスク優先順位管理
+ドラッグ&ドロップでタスクの並び順を変更できるインタラクティブなリスト
 
-- [Tailwind CSS](https://tailwindcss.com/) - ユーティリティファーストCSS フレームワーク
-- [shadcn/ui](https://ui.shadcn.com/) - プリインストールされたUIコンポーネント
-- [Lucide](https://lucide.dev/) - 美しく一貫性のあるアイコン
-- [React Router](https://reactrouter.com/) - ページ、ルーティング
-- [Tanstack Query](https://tanstack.com/query/docs) - データフェッチ、状態管理
-- [Tanstack Table](https://tanstack.com/table/docs) - インタラクティブなテーブル、データグリッド
-- [sonner](https://sonner.emilkowal.ski/) - トースト通知
+<img width="1947" height="1282" alt="image" src="https://github.com/user-attachments/assets/c7737f0c-4388-426c-94af-ee57391e9116" />
+
+### 📋 カンバンボード
+タスクをドラッグ&ドロップでステータス間を移動できるカンバンビュー
+
+<img width="1949" height="1142" alt="image" src="https://github.com/user-attachments/assets/108dc6cf-cd0d-4fa4-b9f4-18f563501c26" />
+
+
+### 📅 ガントチャート
+タスクをドラッグで移動、ハンドルで期間変更できるインタラクティブなガントチャート
+
+<img width="2037" height="1317" alt="image" src="https://github.com/user-attachments/assets/5854895c-1ec6-43f9-b274-7e75982f0f18" />
 
 ---
 
@@ -71,22 +93,30 @@ Microsoft Learn Catalog API データをサンプルとして活用し、ダッ�
 - Git
 - VS Code (推奨)
 - GitHub Copilot 拡張機能 (推奨)
+- GitHub Pro / Enterprise ライセンス
+- Power Apps Premium ライセンス
 
 ### インストール
 
-```bash
+```PowerShell
 # リポジトリをクローン
 git clone https://github.com/geekfujiwara/CodeAppsStarter.git
 cd CodeAppsStarter
+```
 
+```PowerShell
 # 依存関係をインストール
 npm install
+```
 
+```PowerShell
 # 開発サーバーを起動
 npm run dev
 ```
 
 ブラウザで自動的に開かれるアプリの動作を確認してください。
+
+ここまでできましたら起動された Code Apps Starter アプリ内のガイドのとおりに実行してください。
 
 ---
 
@@ -123,77 +153,6 @@ npm run dev
 - 人気モジュールのハイライト表示
 - フォーム実装サンプル
 - カード表示サンプル
-
-### フッター
-
-以下のソーシャルリンクを含むフッター:
-
-- X (Twitter): [@geekfujiwara](https://x.com/geekfujiwara)
-- YouTube: [Geek Fujiwara チャンネル](https://www.youtube.com/@geekfujiwara)
-- Udemy: [コース一覧](https://www.udemy.com/user/gikuhuziwarateng-yuan-hong-dao/)
-- ブログ: [geekfujiwara.com](https://www.geekfujiwara.com/)
-
----
-
-## 開発ワークフロー
-
-### ローカル開発
-
-```bash
-# 開発サーバーを起動してローカルで動作確認
-npm run dev
-```
-
-### Power Apps へのデプロイ
-
-ローカルでの動作確認が完了したら、アプリをビルドして Power Apps 環境にデプロイします。
-
-```bash
-# Power Apps 環境にアプリを初期化 (初回のみ)
-pac code init --environment <環境ID> --displayname <アプリ名>
-
-# アプリをビルド
-npm run build
-
-# Power Apps にデプロイ
-pac code push
-```
-
----
-
-## プロジェクト構造
-
-```text
-CodeAppsStarter/
-├── public/              # 静的アセット
-│   ├── geekkumanomi.svg # Geek アイコン
-│   └── power-apps.svg   # Power Apps ロゴ
-├── src/
-│   ├── components/      # 再利用可能なコンポーネント
-│   │   ├── ui/          # shadcn/ui コンポーネント
-│   │   ├── sidebar.tsx
-│   │   ├── sidebar-layout.tsx
-│   │   ├── form-modal.tsx
-│   │   ├── link-confirm-modal.tsx
-│   │   ├── learn-module-form.tsx
-│   │   └── mode-toggle.tsx
-│   ├── pages/           # ページコンポーネント
-│   │   ├── _layout.tsx  # レイアウトとヘッダー/フッター
-│   │   ├── home.tsx     # ダッシュボード
-│   │   ├── learn.tsx    # ギャラリー&フィルター実装
-│   │   ├── guide.tsx    # テンプレートの使い方ガイド
-│   │   └── not-found.tsx
-│   ├── hooks/           # カスタムフック
-│   │   ├── use-learn-catalog.ts
-│   │   └── use-theme.ts
-│   ├── lib/             # ユーティリティ関数
-│   │   ├── learn-client.ts
-│   │   └── utils.ts
-│   ├── providers/       # コンテキストプロバイダー
-│   └── router.tsx       # ルーティング設定
-├── package.json
-└── vite.config.ts
-```
 
 ---
 
