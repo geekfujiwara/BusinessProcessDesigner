@@ -24,7 +24,12 @@ Microsoft Learn Catalog API データをサンプルとして活用し、ダッ�
 - **レスポンシブデザイン** - モバイル対応のサイドバーナビゲーション
 - **使い方ガイド** - GitHub Copilot との連携方法を含む詳細なガイド
 
-https://github.com/user-attachments/assets/6dbc4c34-3d23-45a7-afbb-0cd3e71b553e
+
+
+
+https://github.com/user-attachments/assets/d9cef0e8-91ca-41ea-b40f-5f342dd98a13
+
+
 
 ---
 
