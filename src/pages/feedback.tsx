@@ -13,14 +13,14 @@ export default function FeedbackPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-6">
+    <div className="w-full max-w-full px-4 pb-8 pt-6">
       {/* ヘッダーセクション - グリッドレイアウト */}
-      <div className={`grid grid-cols-1 gap-8 mb-8 ${isTocOpen ? 'lg:grid-cols-[280px_1fr]' : 'lg:grid-cols-[32px_1fr]'}`}>
+      <div className={`grid grid-cols-1 gap-8 mb-8 w-full max-w-full ${isTocOpen ? 'lg:grid-cols-[280px_1fr]' : 'lg:grid-cols-[32px_1fr]'}`}>
         {/* 左側空白（目次用スペース確保） */}
         <div className="hidden lg:block"></div>
         
         {/* タイトルコンテンツ */}
-        <div className="space-y-4 text-center lg:text-left">
+        <div className="space-y-4 text-center lg:text-left min-w-0 w-full">
           <div className="flex items-center justify-center lg:justify-start gap-2">
             <Heart className="h-8 w-8 text-primary" />
             <h1 className="text-4xl font-bold tracking-tight">フィードバック</h1>
@@ -33,7 +33,7 @@ export default function FeedbackPage() {
       </div>
 
       {/* メインコンテンツ - グリッドレイアウト */}
-      <div className={`grid grid-cols-1 gap-8 ${isTocOpen ? 'lg:grid-cols-[280px_1fr]' : 'lg:grid-cols-[32px_1fr]'}`}>
+      <div className={`grid grid-cols-1 gap-8 w-full max-w-full ${isTocOpen ? 'lg:grid-cols-[280px_1fr]' : 'lg:grid-cols-[32px_1fr]'}`}>
         {/* 目次サイドバー */}
         <aside className="hidden lg:block">
           <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
@@ -62,7 +62,7 @@ export default function FeedbackPage() {
         </aside>
 
         {/* メインコンテンツ */}
-        <main className="space-y-8">
+        <main className="space-y-8 min-w-0 w-full">
       <Card className="border-primary/20" id="importance">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

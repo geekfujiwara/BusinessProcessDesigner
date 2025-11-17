@@ -191,17 +191,27 @@ export function ChartDashboard() {
                     const y = cy + radius * Math.sin(-midAngle * Math.PI / 180)
                     
                     return (
-                      <text
-                        x={x}
-                        y={y}
-                        fill="white"
-                        textAnchor="middle"
-                        dominantBaseline="central"
-                        fontSize={12}
-                        fontWeight="bold"
-                      >
-                        {`${level}`}
-                      </text>
+                      <g>
+                        <rect
+                          x={x - 20}
+                          y={y - 10}
+                          width={40}
+                          height={20}
+                          fill="rgba(0, 0, 0, 0.7)"
+                          rx={4}
+                        />
+                        <text
+                          x={x}
+                          y={y}
+                          fill="white"
+                          textAnchor="middle"
+                          dominantBaseline="central"
+                          fontSize={12}
+                          fontWeight="bold"
+                        >
+                          {`${level}`}
+                        </text>
+                      </g>
                     )
                   }}
                   labelLine={false}
