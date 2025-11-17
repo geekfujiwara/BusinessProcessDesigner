@@ -23,5 +23,24 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-  }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Reactライブラリを別チャンクに
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          // UI コンポーネントライブラリ
+          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-select', '@radix-ui/react-tabs'],
+          // チャートライブラリ
+          'chart-vendor': ['recharts'],
+          // DnDライブラリ
+          'dnd-vendor': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
+          // ユーティリティ
+          'utils-vendor': ['clsx', 'tailwind-merge', 'date-fns'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600,
+  },
 })

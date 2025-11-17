@@ -1,10 +1,7 @@
-import { useEffect, useMemo, useState } from "react"
-import { Link } from "react-router-dom"
+import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Combobox } from "@/components/ui/combobox"
 import { CodeBlock } from "@/components/code-block"
 import { useLearnCatalog } from "@/hooks/use-learn-catalog"
 import { LinkConfirmModal, useLinkModal } from "@/components/link-confirm-modal"
@@ -13,64 +10,18 @@ import { TaskPriorityList } from "@/components/task-priority-list"
 import { GanttChart } from "@/components/gantt-chart"
 import { KanbanBoard } from "@/components/kanban-board"
 import { ChartDashboard } from "@/components/chart-dashboard"
-import { AlertCircle, BookOpen, Clock, ExternalLink, Layers, RefreshCw, Target, List, X } from "lucide-react"
-import type { LearnAuxiliaryItem } from "@/lib/learn-client"
+import { StatsCards, SearchFilterGallery } from "@/components/gallery-components"
+import type { GalleryItem, FilterConfig } from "@/components/search-filter-gallery"
+import { getBadgeColorClass, flattenItems } from "@/lib/gallery-utils"
+import { AlertCircle, BookOpen, Clock, Layers, RefreshCw, Target, List, X } from "lucide-react"
 
 const ITEMS_PER_PAGE = 9
-
-// Badge の色を決定するヘルパー関数
-function getBadgeColorClass(text: string): string {
-  const lowerText = text.toLowerCase()
-  
-  // レベルに基づく色分け
-  if (lowerText.includes('beginner') || lowerText.includes('初級')) {
-    return 'bg-[var(--badge-beginner)] text-[var(--badge-beginner-foreground)] hover:bg-[var(--badge-beginner)]/80'
-  }
-  if (lowerText.includes('intermediate') || lowerText.includes('中級')) {
-    return 'bg-[var(--badge-intermediate)] text-[var(--badge-intermediate-foreground)] hover:bg-[var(--badge-intermediate)]/80'
-  }
-  if (lowerText.includes('advanced') || lowerText.includes('上級') || lowerText.includes('expert')) {
-    return 'bg-[var(--badge-advanced)] text-[var(--badge-advanced-foreground)] hover:bg-[var(--badge-advanced)]/80'
-  }
-  
-  // ロールに基づく色分け
-  if (lowerText.includes('administrator') || lowerText.includes('管理者')) {
-    return 'bg-[var(--badge-administrator)] text-[var(--badge-administrator-foreground)] hover:bg-[var(--badge-administrator)]/80'
-  }
-  if (lowerText.includes('developer') || lowerText.includes('開発者')) {
-    return 'bg-[var(--badge-developer)] text-[var(--badge-developer-foreground)] hover:bg-[var(--badge-developer)]/80'
-  }
-  
-  // デフォルト
-  return ''
-}
-
-function flattenItems(items: LearnAuxiliaryItem[]): LearnAuxiliaryItem[] {
-  const result: LearnAuxiliaryItem[] = []
-
-  const traverse = (nodeList: LearnAuxiliaryItem[]) => {
-    for (const node of nodeList) {
-      result.push({ id: node.id, name: node.name })
-      if (node.children?.length) {
-        traverse(node.children)
-      }
-    }
-  }
-
-  traverse(items)
-  return result
-}
 
 export default function DesignShowcasePage() {
   const queryOptions = useMemo(() => ({ top: 300 }), [])
   const { data, isLoading, isError, error, refetch, summary } = useLearnCatalog(queryOptions)
   const { modalData, openModal, closeModal } = useLinkModal()
 
-  const [searchQuery, setSearchQuery] = useState("")
-  const [roleFilter, setRoleFilter] = useState("all")
-  const [productFilter, setProductFilter] = useState("all")
-  const [levelFilter, setLevelFilter] = useState("all")
-  const [currentPage, setCurrentPage] = useState(1)
   const [isTocOpen, setIsTocOpen] = useState(true)
 
   const modules = useMemo(() => data?.modules ?? [], [data?.modules])
@@ -111,78 +62,112 @@ export default function DesignShowcasePage() {
     return Array.from(new Set(ids))
   }, [modules])
 
-  const filteredModules = useMemo(() => {
-    return modules.filter((module) => {
-      const matchesSearch = searchQuery
-        ? module.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          module.summary.toLowerCase().includes(searchQuery.toLowerCase())
-        : true
+  // Convert modules to GalleryItem format
+  const galleryItems = useMemo<GalleryItem[]>(() => {
+    return modules.map((module) => ({
+      id: module.uid,
+      title: module.title,
+      description: module.summary,
+      badges: [
+        ...module.levels.map((level) => ({
+          label: level,
+          className: getBadgeColorClass(level),
+        })),
+        ...module.roles.slice(0, 3).map((role) => ({
+          label: roleNameMap.get(role) ?? role,
+          className: getBadgeColorClass(roleNameMap.get(role) ?? role),
+        })),
+      ],
+      metadata: [
+        { label: "製品", value: module.products.map((p) => productNameMap.get(p) ?? p).join(", ") },
+        { label: "学習時間", value: `約 ${module.durationInMinutes} 分` },
+        ...(module.lastModified ? [{ label: "更新日", value: module.lastModified.substring(0, 10) }] : []),
+      ],
+      actionLabel: "Learn で開く",
+      onAction: () => openModal(module.url, module.title, module.summary),
+      // Store raw data for filtering
+      _raw: {
+        roles: module.roles,
+        products: module.products,
+        levels: module.levels,
+      },
+    }))
+  }, [modules, productNameMap, roleNameMap, openModal])
 
-      const matchesRole =
-        roleFilter === "all" ||
-        module.roles.some((r) => {
-          const id = typeof r === "string" ? r : (r as { id?: string }).id ?? String(r)
-          return id === roleFilter
-        })
-      const matchesProduct =
-        productFilter === "all" ||
-        module.products.some((p) => {
-          const id = typeof p === "string" ? p : (p as { id?: string }).id ?? String(p)
-          return id === productFilter
-        })
-      const matchesLevel = levelFilter === "all" || module.levels.includes(levelFilter)
+  // Filter configuration for FilterableGallery
+  const filterConfig = useMemo<FilterConfig[]>(() => [
+    {
+      key: "role",
+      label: "ロール",
+      placeholder: "ロールを選択",
+      options: [
+        { value: "all", label: "すべてのロール" },
+        ...roleOptions.map((role) => ({
+          value: role,
+          label: roleNameMap.get(role) ?? role,
+        })),
+      ],
+    },
+    {
+      key: "level",
+      label: "レベル",
+      placeholder: "レベルを選択",
+      options: [
+        { value: "all", label: "すべてのレベル" },
+        ...levelOptions.map((level) => ({
+          value: level,
+          label: level,
+        })),
+      ],
+    },
+    {
+      key: "product",
+      label: "製品",
+      placeholder: "製品を選択",
+      options: [
+        { value: "all", label: "すべての製品" },
+        ...productOptions.map((product) => ({
+          value: product,
+          label: productNameMap.get(product) ?? product,
+        })),
+      ],
+    },
+  ], [roleOptions, roleNameMap, levelOptions, productOptions, productNameMap])
 
-      return matchesSearch && matchesRole && matchesProduct && matchesLevel
-    })
-  }, [modules, searchQuery, roleFilter, productFilter, levelFilter])
+  // Custom filter function for module-specific filtering
+  const handleFilterItem = (item: GalleryItem, searchQuery: string, filters: Record<string, string>) => {
+    const raw = item._raw as { roles: string[]; products: string[]; levels: string[] }
+    
+    // Search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase()
+      const matchesTitle = item.title.toLowerCase().includes(query)
+      const matchesDescription = item.description?.toLowerCase().includes(query)
+      if (!matchesTitle && !matchesDescription) return false
+    }
 
-  const totalPages = Math.max(1, Math.ceil(filteredModules.length / ITEMS_PER_PAGE))
+    // Role filter
+    if (filters.role && filters.role !== "all") {
+      if (!raw.roles.includes(filters.role)) return false
+    }
 
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [searchQuery, roleFilter, productFilter, levelFilter])
+    // Level filter
+    if (filters.level && filters.level !== "all") {
+      if (!raw.levels.includes(filters.level)) return false
+    }
 
-  const paginatedModules = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-    return filteredModules.slice(startIndex, startIndex + ITEMS_PER_PAGE)
-  }, [filteredModules, currentPage])
+    // Product filter
+    if (filters.product && filters.product !== "all") {
+      if (!raw.products.includes(filters.product)) return false
+    }
 
-  const handleOpenModule = (url: string, title: string, summary: string) => {
-    openModal(url, title, summary)
+    return true
   }
 
   const featuredCertifications = useMemo(() => certifications.slice(0, 6), [certifications])
 
   const handleOpenCertification = (url: string, title: string, summary: string) => {
     openModal(url, title, summary)
-  }
-
-  // ページネーション番号を生成（1,2,3,4,5...最後）
-  const getPaginationNumbers = () => {
-    const pages: (number | string)[] = []
-    const maxVisible = 5 // 最大表示ページ数
-
-    if (totalPages <= maxVisible + 1) {
-      // ページ数が少ない場合は全て表示
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i)
-      }
-    } else {
-      // 1,2,3,4,5を表示
-      for (let i = 1; i <= Math.min(maxVisible, totalPages); i++) {
-        pages.push(i)
-      }
-      // 省略記号
-      if (totalPages > maxVisible) {
-        pages.push("...")
-      }
-      // 最後のページ
-      if (totalPages > maxVisible) {
-        pages.push(totalPages)
-      }
-    }
-
-    return pages
   }
 
   return (
@@ -225,7 +210,7 @@ export default function DesignShowcasePage() {
                   統計カード
                 </a>
                 <a href="#gallery" className="block text-sm text-muted-foreground hover:text-white hover:bg-accent rounded-md px-3 py-2 transition-colors">
-                  ギャラリー
+                  検索・フィルター & ギャラリー
                 </a>
                 <a href="#priority" className="block text-sm text-muted-foreground hover:text-white hover:bg-accent rounded-md px-3 py-2 transition-colors">
                   優先順位管理
@@ -299,49 +284,36 @@ export default function DesignShowcasePage() {
         </div>
       </div>
 
-      {/* Summary cards */}
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">モジュール</CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary?.moduleCount ?? "--"}</div>
-            <p className="text-xs text-muted-foreground">サンプルとして取得したモジュール数</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">ラーニング パス</CardTitle>
-            <Layers className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary?.learningPathCount ?? "--"}</div>
-            <p className="text-xs text-muted-foreground">分析対象のラーニング パス数</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">認定資格</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary?.certificationCount ?? "--"}</div>
-            <p className="text-xs text-muted-foreground">取得対象の認定資格数</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">平均学習時間</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary?.averageDuration ?? "--"}分</div>
-            <p className="text-xs text-muted-foreground">モジュール単位の平均所要時間</p>
-          </CardContent>
-        </Card>
-      </section>
+      {/* Summary cards with new component */}
+      <StatsCards
+        stats={[
+          {
+            title: "モジュール",
+            value: summary?.moduleCount ?? "--",
+            description: "サンプルとして取得したモジュール数",
+            icon: BookOpen,
+          },
+          {
+            title: "ラーニング パス",
+            value: summary?.learningPathCount ?? "--",
+            description: "分析対象のラーニング パス数",
+            icon: Layers,
+          },
+          {
+            title: "認定資格",
+            value: summary?.certificationCount ?? "--",
+            description: "取得対象の認定資格数",
+            icon: Target,
+          },
+          {
+            title: "平均学習時間",
+            value: `${summary?.averageDuration ?? "--"}分`,
+            description: "モジュール単位の平均所要時間",
+            icon: Clock,
+          },
+        ]}
+        columns={4}
+      />
 
       {/* デザインテンプレート: カード */}
       {!isLoading && featuredCertifications.length > 0 && (
@@ -406,12 +378,12 @@ export default function DesignShowcasePage() {
         </section>
       )}
 
-      {/* デザインテンプレート: 検索・フィルター */}
-      <div className="space-y-3">
+      {/* デザインテンプレート: 検索・フィルター & ギャラリー */}
+      <div className="space-y-3" id="gallery">
         <div className="space-y-2">
-          <h2 className="text-xl font-semibold text-foreground">🔍 検索とフィルター</h2>
+          <h2 className="text-xl font-semibold text-foreground">🔍 検索・フィルター & ギャラリー</h2>
           <p className="text-sm text-muted-foreground">
-            検索バーと複数のドロップダウンフィルターを組み合わせたデータ絞り込み機能
+            検索バー、複数のドロップダウンフィルター、カード形式のギャラリー表示、ページネーション機能を統合
           </p>
           <details className="text-sm">
             <summary className="cursor-pointer font-medium text-primary hover:underline">
@@ -424,104 +396,14 @@ export default function DesignShowcasePage() {
                 description="大量のデータから条件に合う項目を絞り込む機能が必要な場合に使用します"
               />
               <CodeBlock
-                code="Card コンポーネント内に Input と Combobox を配置して検索・フィルター機能を実装。[フィルター条件1]、[フィルター条件2]、[フィルター条件3]で絞り込み可能にして"
+                code="Card コンポーネントを使って[あなたのデータ]のタイトル、概要、Badge コンポーネントで属性を表示し、Button コンポーネントでアクションを含むカードを3列グリッドで表示。ページネーション付き"
                 language="text"
-                description="複数の条件を組み合わせた高度な検索機能を実装する際に活用できます"
+                description="検索・フィルター機能と連携したカードギャラリーを実装する際に活用できます"
               />
             </div>
           </details>
         </div>
       </div>
-
-      {/* Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">検索とフィルター</CardTitle>
-          <CardDescription>要件に合わせてモジュールを絞り込みます。</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="sm:col-span-2 lg:col-span-2">
-              <Input
-                placeholder="モジュール名・概要を検索"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-              />
-            </div>
-            <Combobox
-              value={roleFilter}
-              onValueChange={setRoleFilter}
-              options={[
-                { value: "all", label: "すべてのロール" },
-                ...roleOptions.map((role) => ({
-                  value: role,
-                  label: roleNameMap.get(role) ?? role,
-                })),
-              ]}
-              searchPlaceholder="ロールを検索..."
-              placeholder="ロールを選択"
-              emptyMessage="ロールが見つかりません"
-            />
-            <Combobox
-              value={levelFilter}
-              onValueChange={setLevelFilter}
-              options={[
-                { value: "all", label: "すべてのレベル" },
-                ...levelOptions.map((level) => ({
-                  value: level,
-                  label: level,
-                })),
-              ]}
-              searchPlaceholder="レベルを検索..."
-              placeholder="レベルを選択"
-              emptyMessage="レベルが見つかりません"
-            />
-            <Combobox
-              value={productFilter}
-              onValueChange={setProductFilter}
-              options={[
-                { value: "all", label: "すべての製品" },
-                ...productOptions.map((product) => ({
-                  value: product,
-                  label: productNameMap.get(product) ?? product,
-                })),
-              ]}
-              searchPlaceholder="製品を検索..."
-              placeholder="製品を選択"
-              emptyMessage="製品が見つかりません"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* デザインテンプレート: ギャラリー表示 */}
-      {!isLoading && !isError && filteredModules.length > 0 && (
-        <div className="space-y-3" id="gallery">
-          <div className="space-y-2">
-            <h2 className="text-xl font-semibold text-foreground">🎨 ギャラリー</h2>
-            <p className="text-sm text-muted-foreground">
-              カード形式のギャラリー表示とページネーション機能
-            </p>
-            <details className="text-sm">
-              <summary className="cursor-pointer font-medium text-primary hover:underline">
-                GitHub Copilot への指示例
-              </summary>
-              <div className="mt-2 space-y-2">
-                <CodeBlock
-                  code="Card コンポーネントを使って[あなたのデータ]のタイトル、概要、Badge コンポーネントで属性を表示し、Button コンポーネントでアクションを含むカードを3列グリッドで表示。ページネーション付き"
-                  language="text"
-                  description="大量のアイテムをページごとに分けて表示したい場合に使用します"
-                />
-                <CodeBlock
-                  code="CardHeader、CardDescription、CardContent コンポーネントを使って[あなたのAPI]データをカード形式で表示するギャラリー。フィルター結果に応じて動的にページネーションを更新"
-                  language="text"
-                  description="検索・フィルター機能と連携したカードギャラリーを実装する際に活用できます"
-                />
-              </div>
-            </details>
-          </div>
-        </div>
-      )}
 
       {/* Loading state */}
       {isLoading && <LoadingSkeletonGrid columns={3} count={ITEMS_PER_PAGE} variant="detailed" />}
@@ -545,125 +427,18 @@ export default function DesignShowcasePage() {
         </Card>
       )}
 
-      {/* Results */}
+      {/* Search Filter Gallery Component */}
       {!isLoading && !isError && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              {filteredModules.length} 件のモジュールが見つかりました
-            </p>
-            {filteredModules.length > 0 && (
-              <p className="text-xs text-muted-foreground">
-                表示件数: {paginatedModules.length} / {filteredModules.length}
-              </p>
-            )}
-          </div>
-
-          {filteredModules.length === 0 ? (
-            <Card>
-              <CardContent className="py-12 text-center text-muted-foreground">
-                条件に一致するモジュールが見つかりませんでした
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {paginatedModules.map((module) => (
-                <Card key={module.uid} className="flex h-full flex-col justify-between">
-                  <CardHeader className="space-y-3">
-                    <CardTitle className="line-clamp-2 text-xl leading-7 text-foreground">
-                      {module.title}
-                    </CardTitle>
-                    <CardDescription className="line-clamp-3 text-sm leading-6 text-muted-foreground">
-                      {module.summary}
-                    </CardDescription>
-                    <div className="flex flex-wrap gap-2">
-                      {module.levels.map((level) => (
-                        <Badge key={`${module.uid}-${level}`} className={getBadgeColorClass(level)}>
-                          {level}
-                        </Badge>
-                      ))}
-                      {module.roles.slice(0, 3).map((role) => (
-                        <Badge key={`${module.uid}-role-${role}`} className={getBadgeColorClass(roleNameMap.get(role) ?? role)}>
-                          {roleNameMap.get(role) ?? role}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardHeader>
-                  <CardContent className="flex flex-col gap-4">
-                    <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                      {module.products.map((product) => (
-                        <span key={`${module.uid}-product-${product}`} className="rounded-full bg-muted px-3 py-1">
-                          {productNameMap.get(product) ?? product}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>学習時間: 約 {module.durationInMinutes} 分</span>
-                      {module.lastModified && <span>更新: {module.lastModified.substring(0, 10)}</span>}
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        className="flex-1 gap-2"
-                        onClick={() => handleOpenModule(module.url, module.title, module.summary)}
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                        Learn で開く
-                      </Button>
-                      <Button asChild variant="outline">
-                        <Link to={`/guide?module=${encodeURIComponent(module.uid)}`} className="gap-2">
-                          <BookOpen className="h-4 w-4" />
-                          ガイド連携
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-
-          {filteredModules.length > ITEMS_PER_PAGE && (
-            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <Button
-                variant="outline"
-                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
-                disabled={currentPage === 1}
-                className="w-full sm:w-auto"
-              >
-                前へ
-              </Button>
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {getPaginationNumbers().map((pageNumber, index) => {
-                  if (pageNumber === "...") {
-                    return (
-                      <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground">
-                        ...
-                      </span>
-                    )
-                  }
-                  return (
-                    <Button
-                      key={pageNumber}
-                      variant={pageNumber === currentPage ? "default" : "outline"}
-                      onClick={() => setCurrentPage(pageNumber as number)}
-                      className="h-10 w-10"
-                    >
-                      {pageNumber}
-                    </Button>
-                  )
-                })}
-              </div>
-              <Button
-                variant="outline"
-                onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
-                disabled={currentPage === totalPages}
-                className="w-full sm:w-auto"
-              >
-                次へ
-              </Button>
-            </div>
-          )}
-        </div>
+        <SearchFilterGallery
+          items={galleryItems}
+          filters={filterConfig}
+          searchPlaceholder="モジュール名・概要を検索"
+          onFilterItem={handleFilterItem}
+          itemsPerPage={ITEMS_PER_PAGE}
+          columns={3}
+          filterCardTitle="検索とフィルター"
+          filterCardDescription="要件に合わせてモジュールを絞り込みます"
+        />
       )}
 
       {/* デザインテンプレート: ドラッグ&ドロップ タスク管理 */}

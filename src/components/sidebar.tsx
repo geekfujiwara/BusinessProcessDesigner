@@ -77,7 +77,7 @@ export function Sidebar() {
 
       {/* サイドバー */}
       <aside className={cn(
-        "fixed left-0 bg-[var(--menu-bg)] border-r border-border shadow-lg z-50 transition-all duration-300 ease-in-out flex flex-col",
+        "fixed left-0 bg-[var(--menu-bg)] border-r border-border shadow-lg z-[100] transition-all duration-300 ease-in-out flex flex-col overflow-visible",
         isCollapsed ? "w-16" : "w-64",
         // モバイルでは完全に隠す/表示
         "max-md:transition-transform",
@@ -85,13 +85,18 @@ export function Sidebar() {
         positionClasses
       )}>
         {/* ナビゲーション */}
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 overflow-visible">
           <nav className={cn(
-            "space-y-6",
+            "space-y-6 overflow-visible",
             isCollapsed ? "p-1" : "p-2"
           )}>
             {navItems.map((section, idx) => (
               <div key={idx} className="space-y-1">
+                {/* カテゴリー区切り線（折りたたみ時のみ表示） */}
+                {isCollapsed && idx > 0 && (
+                  <div className="mx-2 my-2 border-t border-border" />
+                )}
+                
                 {/* カテゴリーラベル */}
                 <div className={cn(
                   "px-3 py-2 transition-all duration-300",
@@ -129,7 +134,7 @@ export function Sidebar() {
                   )
 
                   const tooltipNode = isCollapsed ? (
-                    <div className="absolute left-full ml-2 px-2 py-1 bg-popover text-popover-foreground text-sm rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                    <div className="fixed left-[4.5rem] px-3 py-1.5 bg-popover text-popover-foreground text-sm rounded-md shadow-lg border border-border opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-[200]">
                       {item.label}
                     </div>
                   ) : null

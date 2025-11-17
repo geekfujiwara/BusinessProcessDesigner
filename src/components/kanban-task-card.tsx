@@ -18,6 +18,7 @@ export function KanbanTaskCard({ task, isDragging = false, onClick }: KanbanTask
     transform,
     transition,
     isDragging: isSortableDragging,
+    isOver,
   } = useSortable({ id: task.id })
 
   const style = {
@@ -43,7 +44,9 @@ export function KanbanTaskCard({ task, isDragging = false, onClick }: KanbanTask
     <div
       ref={setNodeRef}
       style={style}
-      className="bg-card border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+      className={`bg-card border rounded-lg p-4 shadow-sm hover:shadow-md transition-all cursor-pointer ${
+        isOver ? "shadow-lg ring-2 ring-primary/50 scale-[1.02] bg-accent/50" : ""
+      }`}
       onClick={onClick}
     >
       <div className="flex items-start gap-3">
