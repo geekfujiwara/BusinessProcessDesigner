@@ -16,6 +16,7 @@ import {
 } from "@dnd-kit/sortable"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { FullscreenWrapper } from "@/components/fullscreen-wrapper"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -254,23 +255,30 @@ export function KanbanBoard() {
   const activeTask = activeId ? tasks.find((task) => task.id === activeId) : null
 
   return (
+    <FullscreenWrapper showHeader={false}>
+      {({ isFullscreen: _isFullscreen, FullscreenButton }) => (
     <>
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex items-start justify-between gap-4">
             <div>
               <CardTitle className="text-lg font-semibold">カンバンボード</CardTitle>
               <CardDescription>
                 ドラッグ＆ドロップでタスクのステータスを変更できます。カードをクリックして編集できます。
               </CardDescription>
             </div>
-            <Button onClick={() => handleOpenTask()} className="gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <FullscreenButton />
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4 flex justify-end">
+            <Button onClick={() => handleOpenTask()} size="sm" variant="default" className="gap-2 h-9">
               <Plus className="h-4 w-4" />
               新規タスク
             </Button>
           </div>
-        </CardHeader>
-        <CardContent>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCorners}
@@ -441,5 +449,7 @@ export function KanbanBoard() {
         onConfirm={handleConfirmDelete}
       />
     </>
+      )}
+    </FullscreenWrapper>
   )
 }

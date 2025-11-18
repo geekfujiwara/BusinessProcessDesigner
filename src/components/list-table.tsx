@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Combobox } from "@/components/ui/combobox"
 import type { ComboboxOption } from "@/components/ui/combobox"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { CsvImportExport, type CsvColumn } from "@/components/csv-import-export"
+import { CsvImportExport, type CsvColumn, type CsvOperationType } from "@/components/csv-import-export"
 import { FormModal } from "@/components/form-modal"
 import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -49,7 +49,8 @@ export type ListTableProps<T> = {
   enableCsv?: boolean
   csvColumns?: CsvColumn<T>[]
   csvFileName?: string
-  onCsvImport?: (data: T[]) => void
+  csvUniqueKey?: keyof T
+  onCsvImport?: (data: T[], operationsMap: Map<T, CsvOperationType>) => void
   onRowClick?: (item: T) => void
   renderForm?: (item: T | null, onClose: () => void) => React.ReactNode
   formTitle?: string
@@ -71,6 +72,7 @@ export function ListTable<T extends Record<string, unknown>>({
   enableCsv = false,
   csvColumns,
   csvFileName = "data",
+  csvUniqueKey,
   onCsvImport,
   onRowClick,
   renderForm,
@@ -172,9 +174,10 @@ export function ListTable<T extends Record<string, unknown>>({
             {enableCsv && csvColumns && (
               <CsvImportExport
                 columns={csvColumns}
-                data={sortedData}
+                data={data}
                 onImport={onCsvImport}
                 fileName={csvFileName}
+                uniqueKey={csvUniqueKey}
               />
             )}
           </div>
@@ -281,7 +284,13 @@ export function ListTable<T extends Record<string, unknown>>({
                       >
                         {column.render
                           ? column.render(item)
-                          : String(item[column.key as keyof T] ?? "")}
+                          : (() => {
+                              const value = item[column.key as keyof T]
+                              if (column.key === 'id') {
+                                console.log('ID column:', { key: column.key, value, item })
+                              }
+                              return String(value ?? "")
+                            })()}
                       </TableCell>
                     ))}
                   </TableRow>

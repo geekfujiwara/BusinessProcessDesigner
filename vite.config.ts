@@ -27,20 +27,47 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Reactライブラリを別チャンクに
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          // UI コンポーネントライブラリ
-          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-select', '@radix-ui/react-tabs'],
-          // チャートライブラリ
-          'chart-vendor': ['recharts'],
-          // DnDライブラリ
-          'dnd-vendor': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
-          // ユーティリティ
-          'utils-vendor': ['clsx', 'tailwind-merge', 'date-fns'],
+        manualChunks: (id) => {
+          // node_modules のベンダーライブラリを分割
+          if (id.includes('node_modules')) {
+            // React関連
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+              return 'react-vendor'
+            }
+            // Radix UI コンポーネント
+            if (id.includes('@radix-ui')) {
+              return 'ui-vendor'
+            }
+            // チャート関連
+            if (id.includes('recharts')) {
+              return 'chart-vendor'
+            }
+            // DnD関連
+            if (id.includes('@dnd-kit')) {
+              return 'dnd-vendor'
+            }
+            // Mermaid関連 (大きいので分離)
+            if (id.includes('mermaid')) {
+              return 'mermaid-vendor'
+            }
+            // Cytoscape関連 (大きいので分離)
+            if (id.includes('cytoscape')) {
+              return 'cytoscape-vendor'
+            }
+            // KaTeX関連 (大きいので分離)
+            if (id.includes('katex')) {
+              return 'katex-vendor'
+            }
+            // その他のユーティリティ
+            if (id.includes('clsx') || id.includes('tailwind-merge') || id.includes('date-fns')) {
+              return 'utils-vendor'
+            }
+            // その他のnode_modules
+            return 'vendor'
+          }
         },
       },
     },
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 1500,
   },
 })

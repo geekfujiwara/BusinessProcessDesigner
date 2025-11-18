@@ -27,7 +27,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { CsvImportExport, type CsvColumn } from "@/components/csv-import-export"
+import { CsvImportExport, type CsvColumn, type CsvOperationType } from "@/components/csv-import-export"
 import { Check, X, Plus, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -65,7 +65,8 @@ export type InlineEditTableProps<T extends { id: string | number }> = {
   enableCsv?: boolean
   csvColumns?: CsvColumn<T>[]
   csvFileName?: string
-  onCsvImport?: (data: T[]) => void
+  csvUniqueKey?: keyof T
+  onCsvImport?: (data: T[], operationsMap: Map<T, CsvOperationType>) => void
 }
 
 export function InlineEditTable<T extends { id: string | number }>({
@@ -83,6 +84,7 @@ export function InlineEditTable<T extends { id: string | number }>({
   enableCsv = false,
   csvColumns,
   csvFileName = "data",
+  csvUniqueKey,
   onCsvImport,
 }: InlineEditTableProps<T>) {
   const [data, setData] = useState<T[]>(initialData)
@@ -269,6 +271,7 @@ export function InlineEditTable<T extends { id: string | number }>({
                 data={data}
                 onImport={onCsvImport}
                 fileName={csvFileName}
+                uniqueKey={csvUniqueKey}
               />
             )}
           </div>

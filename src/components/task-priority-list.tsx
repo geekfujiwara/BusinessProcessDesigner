@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { FormModal, FormColumns, FormSection } from "./form-modal"
 import { ConfirmDialog } from "@/components/ui/confirm-dialog"
+import { FullscreenWrapper } from "./fullscreen-wrapper"
 import { GripVertical, Plus } from "lucide-react"
 import { toast } from "sonner"
 
@@ -238,23 +239,30 @@ export function TaskPriorityList() {
   }
 
   return (
+    <FullscreenWrapper showHeader={false}>
+      {({ isFullscreen: _isFullscreen, FullscreenButton }) => (
     <>
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex items-start justify-between gap-4">
             <div>
               <CardTitle className="text-lg font-semibold">タスク優先順位管理</CardTitle>
               <CardDescription>
                 ドラッグ＆ドロップでタスクの優先順位を変更できます。カードをクリックして編集できます。
               </CardDescription>
             </div>
-            <Button onClick={() => handleOpenTask()} className="gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <FullscreenButton />
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4 flex justify-end">
+            <Button onClick={() => handleOpenTask()} size="sm" variant="default" className="gap-2 h-9">
               <Plus className="h-4 w-4" />
               新規タスク
             </Button>
           </div>
-        </CardHeader>
-        <CardContent>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -409,5 +417,7 @@ export function TaskPriorityList() {
         onConfirm={handleConfirmDelete}
       />
     </>
+      )}
+    </FullscreenWrapper>
   )
 }

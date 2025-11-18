@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { FullscreenWrapper } from "@/components/fullscreen-wrapper"
 import { Combobox } from "@/components/ui/combobox"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -1513,9 +1514,11 @@ export function GanttChart() {
   const selectedProjectPhases = filteredPhases
 
   return (
+    <FullscreenWrapper showHeader={false}>
+      {({ isFullscreen: _isFullscreen, FullscreenButton }) => (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between gap-4">
           <div className="flex-1 space-y-3">
             <CardTitle className="text-lg font-semibold">ガントチャート</CardTitle>
             <CardDescription>
@@ -1688,6 +1691,11 @@ export function GanttChart() {
               </div>
             </div>
           </div>
+          <div className="flex-shrink-0">
+            <FullscreenButton />
+          </div>
+        </div>
+        <div className="mt-3">
           <Button onClick={() => handleOpenTask()} size="sm" className="gap-2">
             <Plus className="h-4 w-4" />
             タスク追加
@@ -2589,21 +2597,14 @@ export function GanttChart() {
             <label htmlFor="assignee" className="text-sm font-medium">
               担当者
             </label>
-            <Select
+            <Combobox
+              options={assignees}
               value={formData.assignee}
               onValueChange={(value) => setFormData({ ...formData, assignee: value })}
-            >
-              <SelectTrigger id="assignee">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {assignees.map((assignee) => (
-                  <SelectItem key={assignee.value} value={assignee.value}>
-                    {assignee.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              placeholder="担当者を選択"
+              searchPlaceholder="担当者を検索..."
+              emptyMessage="担当者が見つかりません"
+            />
           </div>
 
           <div className="space-y-2">
@@ -2677,5 +2678,7 @@ export function GanttChart() {
         </DialogContent>
       </Dialog>
     </Card>
+      )}
+    </FullscreenWrapper>
   )
 }

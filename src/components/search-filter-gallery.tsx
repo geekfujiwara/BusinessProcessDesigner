@@ -4,7 +4,8 @@ import { Input } from "@/components/ui/input"
 import { Combobox } from "@/components/ui/combobox"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, ChevronLeft, ChevronRight, Search } from "lucide-react"
+import { FullscreenWrapper } from "./fullscreen-wrapper"
+import { ExternalLink, ChevronLeft, ChevronRight, Search, Plus } from "lucide-react"
 import type { GalleryItem } from "./gallery-grid"
 
 export type { GalleryItem } from "./gallery-grid"
@@ -29,6 +30,9 @@ interface SearchFilterGalleryProps {
   emptyMessage?: string
   filterCardTitle?: string
   filterCardDescription?: string
+  showAddButton?: boolean
+  addButtonLabel?: string
+  onAddItem?: () => void
 }
 
 /**
@@ -85,6 +89,9 @@ export function SearchFilterGallery({
   emptyMessage = "アイテムが見つかりませんでした",
   filterCardTitle = "検索とフィルター",
   filterCardDescription = "条件を指定してアイテムを絞り込みます",
+  showAddButton = false,
+  addButtonLabel = "新規アイテム",
+  onAddItem,
 }: SearchFilterGalleryProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [activeFilters, setActiveFilters] = useState<Record<string, string>>(() => {
@@ -177,12 +184,21 @@ export function SearchFilterGallery({
   }
 
   return (
+    <FullscreenWrapper showHeader={false}>
+      {({ isFullscreen: _isFullscreen, FullscreenButton }) => (
     <div className="space-y-6">
       {/* Filters Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-semibold">{filterCardTitle}</CardTitle>
-          <CardDescription>{filterCardDescription}</CardDescription>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <CardTitle className="text-lg font-semibold">{filterCardTitle}</CardTitle>
+              <CardDescription>{filterCardDescription}</CardDescription>
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <FullscreenButton />
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -212,6 +228,16 @@ export function SearchFilterGallery({
           </div>
         </CardContent>
       </Card>
+
+      {/* Add Item Button */}
+      {showAddButton && onAddItem && (
+        <div className="flex justify-end">
+          <Button onClick={onAddItem} size="sm" variant="default" className="gap-2 h-9">
+            <Plus className="h-4 w-4" />
+            {addButtonLabel}
+          </Button>
+        </div>
+      )}
 
       {/* Results Summary */}
       <div className="flex items-center justify-between">
@@ -338,5 +364,7 @@ export function SearchFilterGallery({
         </div>
       )}
     </div>
+      )}
+    </FullscreenWrapper>
   )
 }

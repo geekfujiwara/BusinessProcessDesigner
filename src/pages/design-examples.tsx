@@ -13,6 +13,7 @@ import { TaskPriorityList } from "@/components/task-priority-list"
 import { GanttChart } from "@/components/gantt-chart"
 import { KanbanBoard } from "@/components/kanban-board"
 import { ChartDashboard } from "@/components/chart-dashboard"
+import { TreeStructure } from "@/components/tree-structure"
 import { StatsCards, SearchFilterGallery } from "@/components/gallery-components"
 import type { GalleryItem, FilterConfig } from "@/components/search-filter-gallery"
 import { ListTable } from "@/components/list-table"
@@ -55,6 +56,7 @@ export default function DesignShowcasePage() {
   ])
 
   const employeeColumns = useMemo<EditableColumn<typeof employees[0]>[]>(() => [
+    { key: "id", label: "ID", editable: false, type: "text", width: "w-20" },
     { key: "name", label: "名前", editable: true, type: "text", width: "w-32" },
     { key: "email", label: "メール", editable: true, type: "text", width: "w-48" },
     { 
@@ -113,48 +115,144 @@ export default function DesignShowcasePage() {
     setEmployees(prev => [...prev, data])
   }
 
-  const handleEmployeeCsvImport = (data: typeof employees) => {
-    console.log(`[CSV Import]`, data)
-    setEmployees(data)
+  const handleEmployeeCsvImport = (data: typeof employees, operationsMap: Map<typeof employees[0], "CREATE" | "UPDATE" | "DELETE">) => {
+    console.log(`[Employee CSV Import]`, data, operationsMap)
+    
+    setEmployees(prev => {
+      let updated = [...prev]
+      
+      data.forEach((item) => {
+        const operation = operationsMap.get(item)
+        
+        if (operation === "CREATE") {
+          // 新規作成: IDがないか、既存IDと重複しない場合
+          const newId = item.id && !updated.find(e => e.id === item.id) 
+            ? item.id 
+            : Math.max(...updated.map(e => e.id), 0) + 1
+          updated.push({ ...item, id: newId })
+        } else if (operation === "UPDATE") {
+          // 更新: 既存アイテムを置き換え
+          const index = updated.findIndex(e => e.id === item.id)
+          if (index !== -1) {
+            updated[index] = item
+          }
+        } else if (operation === "DELETE") {
+          // 削除: 該当IDを除外
+          console.log(`[Employee DELETE] Removing ID: ${item.id}, Before count: ${updated.length}`)
+          updated = updated.filter(e => e.id !== item.id)
+          console.log(`[Employee DELETE] After count: ${updated.length}`)
+        }
+      })
+      
+      console.log(`[Employee CSV Import Complete] Final count: ${updated.length}`)
+      return updated
+    })
   }
 
   // 従業員用CSV列定義
   const employeeCsvColumns = useMemo(() => [
+    {
+      key: "id" as keyof typeof employees[0],
+      label: "ID",
+      csvLabel: "ID",
+      required: false,
+      transform: (value: string) => value ? Number(value) : undefined
+    },
     { 
       key: "name" as keyof typeof employees[0], 
-      label: "名前", 
+      label: "名前",
+      csvLabel: "Name",
       required: true,
       validate: (value: string) => value.trim().length > 0 || "名前は必須です"
     },
     { 
       key: "email" as keyof typeof employees[0], 
-      label: "メール", 
+      label: "メール",
+      csvLabel: "Email",
       required: true,
       validate: (value: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         return emailRegex.test(value) || "有効なメールアドレスを入力してください"
       }
     },
-    { key: "department" as keyof typeof employees[0], label: "部署", required: true },
-    { key: "role" as keyof typeof employees[0], label: "役職", required: true },
+    { 
+      key: "department" as keyof typeof employees[0], 
+      label: "部署",
+      csvLabel: "Department",
+      required: true 
+    },
+    { 
+      key: "role" as keyof typeof employees[0], 
+      label: "役職",
+      csvLabel: "Role",
+      required: true 
+    },
   ], [])
 
-  const handleTaskCsvImport = (data: typeof sampleTasks) => {
-    console.log(`[Task CSV Import]`, data)
-    setSampleTasks(data)
+  const handleTaskCsvImport = (data: typeof sampleTasks, operationsMap: Map<typeof sampleTasks[0], "CREATE" | "UPDATE" | "DELETE">) => {
+    console.log(`[Task CSV Import]`, data, operationsMap)
+    
+    setSampleTasks(prev => {
+      let updated = [...prev]
+      
+      data.forEach((item) => {
+        const operation = operationsMap.get(item)
+        
+        if (operation === "CREATE") {
+          // 新規作成: IDがないか、既存IDと重複しない場合
+          const newId = item.id && !updated.find(t => t.id === item.id) 
+            ? item.id 
+            : Math.max(...updated.map(t => t.id), 0) + 1
+          updated.push({ ...item, id: newId })
+        } else if (operation === "UPDATE") {
+          // 更新: 既存アイテムを置き換え
+          const index = updated.findIndex(t => t.id === item.id)
+          if (index !== -1) {
+            updated[index] = item
+          }
+        } else if (operation === "DELETE") {
+          // 削除: 該当IDを除外
+          console.log(`[Task DELETE] Removing ID: ${item.id}, Before count: ${updated.length}`)
+          updated = updated.filter(t => t.id !== item.id)
+          console.log(`[Task DELETE] After count: ${updated.length}`)
+        }
+      })
+      
+      console.log(`[Task CSV Import Complete] Final count: ${updated.length}`)
+      return updated
+    })
   }
 
   // タスク用CSV列定義
   const taskCsvColumns = useMemo(() => [
     {
+      key: "id" as keyof typeof sampleTasks[0],
+      label: "ID",
+      csvLabel: "ID",
+      required: false,
+      transform: (value: string) => value ? Number(value) : undefined
+    },
+    {
       key: "title" as keyof typeof sampleTasks[0],
       label: "タスク名",
+      csvLabel: "Title",
       required: true,
       validate: (value: string) => value.trim().length > 0 || "タスク名は必須です"
     },
     {
+      key: "priority" as keyof typeof sampleTasks[0],
+      label: "優先度",
+      csvLabel: "Priority",
+      required: true,
+      validate: (value: string) => {
+        const validPriorities = ["高", "中", "低"]
+        return validPriorities.includes(value) || `優先度は ${validPriorities.join(", ")} のいずれかである必要があります`
+      }
+    },
+    {
       key: "category" as keyof typeof sampleTasks[0],
       label: "カテゴリ",
+      csvLabel: "Category",
       required: true,
       validate: (value: string) => {
         const validCategories = ["開発", "デザイン", "テスト", "ドキュメント"]
@@ -164,6 +262,7 @@ export default function DesignShowcasePage() {
     {
       key: "status" as keyof typeof sampleTasks[0],
       label: "ステータス",
+      csvLabel: "Status",
       required: true,
       validate: (value: string) => {
         const validStatuses = ["未着手", "進行中", "完了"]
@@ -173,11 +272,13 @@ export default function DesignShowcasePage() {
     {
       key: "assignee" as keyof typeof sampleTasks[0],
       label: "担当者",
+      csvLabel: "Assignee",
       required: true
     },
     {
       key: "progress" as keyof typeof sampleTasks[0],
       label: "進捗",
+      csvLabel: "Progress",
       required: true,
       validate: (value: string) => {
         const num = Number(value)
@@ -188,11 +289,45 @@ export default function DesignShowcasePage() {
     {
       key: "dueDate" as keyof typeof sampleTasks[0],
       label: "期日",
-      required: true
+      csvLabel: "DueDate",
+      required: true,
+      validate: (value: string) => {
+        // yyyyMMdd形式の検証
+        if (!/^\d{8}$/.test(value)) {
+          return "期日はyyyyMMdd形式（例: 20250119）で入力してください"
+        }
+        const year = parseInt(value.substring(0, 4))
+        const month = parseInt(value.substring(4, 6))
+        const day = parseInt(value.substring(6, 8))
+        const date = new Date(year, month - 1, day)
+        if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+          return "有効な日付を入力してください"
+        }
+        return true
+      },
+      transform: (value: string) => {
+        // yyyyMMdd → yyyy-MM-dd
+        if (/^\d{8}$/.test(value)) {
+          return `${value.substring(0, 4)}-${value.substring(4, 6)}-${value.substring(6, 8)}`
+        }
+        return value
+      },
+      format: (value: unknown) => {
+        // yyyy-MM-dd → yyyyMMdd
+        const str = String(value ?? "")
+        return str.replace(/-/g, "")
+      }
     },
   ], [])
 
   const taskColumns = useMemo<TableColumn<typeof sampleTasks[0]>[]>(() => [
+    {
+      key: "id",
+      label: "ID",
+      sortable: true,
+      width: "80px",
+      align: "center",
+    },
     {
       key: "title",
       label: "タイトル",
@@ -465,6 +600,9 @@ export default function DesignShowcasePage() {
                 <a href="#gantt" className="block text-sm text-muted-foreground hover:text-white hover:bg-accent rounded-md px-3 py-2 transition-colors">
                   ガントチャート
                 </a>
+                <a href="#tree" className="block text-sm text-muted-foreground hover:text-white hover:bg-accent rounded-md px-3 py-2 transition-colors">
+                  ツリー構造
+                </a>
               </nav>
             )}
           </div>
@@ -585,6 +723,7 @@ export default function DesignShowcasePage() {
         enableCsv={true}
         csvColumns={taskCsvColumns}
         csvFileName="tasks"
+        csvUniqueKey="id"
         onCsvImport={handleTaskCsvImport}
         formTitle="タスク詳細"
         formDescription="タスクの詳細情報を確認できます"
@@ -679,6 +818,7 @@ export default function DesignShowcasePage() {
         enableCsv={true}
         csvColumns={employeeCsvColumns}
         csvFileName="employees"
+        csvUniqueKey="id"
         onCsvImport={handleEmployeeCsvImport}
       />
 
@@ -869,6 +1009,30 @@ export default function DesignShowcasePage() {
       </div>
 
       <GanttChart />
+
+      {/* デザインテンプレート: ツリー構造 */}
+      <div className="space-y-3" id="tree">
+        <div className="space-y-2">
+          <h2 className="text-xl font-semibold text-foreground">🌳 ツリー構造（BOM例）</h2>
+          <p className="text-sm text-muted-foreground">
+            ドラッグで階層を調整できるツリービュー。右にドラッグして階層を下げ、左にドラッグして階層を上げます
+          </p>
+          <details className="text-sm">
+            <summary className="cursor-pointer font-medium text-primary hover:underline">
+              GitHub Copilot への指示例
+            </summary>
+            <div className="mt-2">
+              <CodeBlock
+                code="TreeStructure コンポーネントを使って、[あなたのデータ]を階層構造で表示して"
+                language="text"
+                description="アイテムを横方向にドラッグして階層レベルを調整できます"
+              />
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <TreeStructure />
 
       </main>
       </div>
