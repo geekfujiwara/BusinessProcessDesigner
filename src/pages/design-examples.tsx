@@ -13,10 +13,8 @@ import { TaskPriorityList } from "@/components/task-priority-list"
 import { GanttChart } from "@/components/gantt-chart"
 import { KanbanBoard } from "@/components/kanban-board"
 import { ChartDashboard } from "@/components/chart-dashboard"
+import { TreeStructure } from "@/components/tree-structure"
 import { StatsCards, SearchFilterGallery } from "@/components/gallery-components"
-
-// TEMPORARILY DISABLED: TreeStructureを遅延ロード（mermaid/cytoscapeを含むため）
-// const TreeStructure = lazy(() => import("@/components/tree-structure"))
 import type { GalleryItem, FilterConfig } from "@/components/search-filter-gallery"
 import { ListTable } from "@/components/list-table"
 import type { TableColumn } from "@/components/list-table"
@@ -1012,9 +1010,7 @@ export default function DesignShowcasePage() {
 
       <GanttChart />
 
-      {/* TEMPORARILY DISABLED: TreeStructure コンポーネント（Mermaid依存のため一時的に無効化） */}
       {/* デザインテンプレート: ツリー構造 */}
-      {/* 
       <div className="space-y-3" id="tree">
         <div className="space-y-2">
           <h2 className="text-xl font-semibold text-foreground">🌳 ツリー構造（BOM例）</h2>
@@ -1036,17 +1032,7 @@ export default function DesignShowcasePage() {
         </div>
       </div>
 
-      <Suspense fallback={
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="flex flex-col items-center gap-2">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-            <p className="text-sm text-muted-foreground">ツリー構造を読み込み中...</p>
-          </div>
-        </div>
-      }>
-        <TreeStructure />
-      </Suspense>
-      */}
+      <TreeStructure />
 
       </main>
       </div>
