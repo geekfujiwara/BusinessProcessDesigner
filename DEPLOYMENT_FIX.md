@@ -17,6 +17,21 @@ Power Apps にデプロイ後、アプリが開けない主な原因:
 ### 1. PowerProvider の簡素化 (完了)
 [src/providers/power-provider.tsx](src/providers/power-provider.tsx) を最新テンプレートに準拠した実装に変更:
 
+### 2. Mermaid/Cytoscape の遅延ロード (完了)
+**問題**: mermaid パッケージが cytoscape を依存として持ち、その CommonJS モジュール形式のコードが Power Apps 上で実行時クラッシュしていました。
+
+**エラー**: `Uncaught TypeError: Cannot set properties of undefined (setting 'exports')`
+
+**修正内容**:
+- [src/pages/design-examples.tsx](src/pages/design-examples.tsx): `TreeStructure` コンポーネントを lazy import に変更
+- [src/components/tree-structure.tsx](src/components/tree-structure.tsx): default export を追加
+- ツリー構造セクションが実際に表示されるまで、mermaid/cytoscape は読み込まれません
+- ビルドサイズ: design-examples チャンクが 157.85 kB → 148.40 kB に削減
+- tree-structure が独立した 10.92 kB のチャンクに分離
+- アプリ起動時のタイムアウト問題を解決
+
+### 3. PowerProvider の簡素化 (以前完了)
+
 ```tsx
 // 変更前: initializedCalled フラグを使用
 let initializedCalled = false;
@@ -103,9 +118,9 @@ Play URL: https://apps.powerapps.com/play/e/{environmentId}/a/{appId}
 
 ## ⚠️ トラブルシューティング
 
-### "fetching your app" のローディング画面で止まる場合
+### "fetching your app" のローディング画面で止まる / "App timed out" エラー
 
-公式ドキュメントによる確認項目:
+公式ドキュメントと今回の調査による確認項目:
 
 1. **npm run build を実行したか**
    ```powershell
@@ -128,11 +143,16 @@ Play URL: https://apps.powerapps.com/play/e/{environmentId}/a/{appId}
    - コンソールログを確認: `Failed to initialize Power Platform SDK` のようなエラーがないか
    - 本修正で PowerProvider は最新テンプレートに準拠済みです
 
-4. **ブラウザプロファイルが正しいか**
+4. **JavaScript の実行時エラーがないか** (今回の主な原因)
+   - ブラウザの開発者ツール (F12) でコンソールを確認
+   - `Uncaught TypeError: Cannot set properties of undefined` のようなエラーがある場合、CommonJS モジュールの互換性問題の可能性
+   - 本修正で mermaid/cytoscape を遅延ロードに変更し、アプリ起動時のクラッシュを回避
+
+5. **ブラウザプロファイルが正しいか**
    - Power Platform 環境にログインしているのと**同じブラウザプロファイル**でアプリを開いてください
    - 別のプロファイルや別のブラウザでは動作しません
 
-5. **環境に必要なコネクタが有効か**
+6. **環境に必要なコネクタが有効か**
    - Power Apps 環境で使用するコネクタ (Office 365、SQL など) が有効になっているか確認
 
 ### "App timed out" エラーが表示される場合

@@ -813,3 +813,6 @@ export function TreeStructure() {
     </FullscreenWrapper>
   )
 }
+
+// デフォルトエクスポートも追加（lazy importのため）
+export default TreeStructure
