@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from "react"
-import mermaid from "mermaid"
+import { useState } from "react"
+// TEMPORARILY DISABLED: mermaid uses cytoscape which has CommonJS incompatibility with Power Apps runtime
+// import mermaid from "mermaid"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -237,99 +238,96 @@ function TreeItem({
   )
 }
 
-// 組織図ビューコンポーネント（Mermaid使用）
-function OrgChartView({
-  data,
-}: {
-  data: TreeNode[]
-  onDelete: (id: string) => void
-  onAddChild: (id: string) => void
-}) {
-  const mermaidRef = useRef<HTMLDivElement>(null)
+// TEMPORARILY DISABLED: 組織図ビューコンポーネント（Mermaid使用）
+// Mermaidはcytoscapeに依存しており、Power Appsランタイムと互換性がありません
+function OrgChartView() {
+  // const mermaidRef = useRef<HTMLDivElement>(null)
 
-  // Mermaidの初期化
-  useEffect(() => {
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'default',
-      flowchart: {
-        useMaxWidth: true,
-        htmlLabels: true,
-        curve: 'basis',
-      },
-      themeVariables: {
-        primaryColor: '#dbeafe',
-        primaryTextColor: '#1e40af',
-        primaryBorderColor: '#93c5fd',
-        lineColor: '#60a5fa',
-        secondaryColor: '#dcfce7',
-        tertiaryColor: '#fed7aa',
-      },
-    })
-  }, [])
+  // // Mermaidの初期化
+  // useEffect(() => {
+  //   mermaid.initialize({
+  //     startOnLoad: false,
+  //     theme: 'default',
+  //     flowchart: {
+  //       useMaxWidth: true,
+  //       htmlLabels: true,
+  //       curve: 'basis',
+  //     },
+  //     themeVariables: {
+  //       primaryColor: '#dbeafe',
+  //       primaryTextColor: '#1e40af',
+  //       primaryBorderColor: '#93c5fd',
+  //       lineColor: '#60a5fa',
+  //       secondaryColor: '#dcfce7',
+  //       tertiaryColor: '#fed7aa',
+  //     },
+  //   })
+  // }, [])
 
-  // TreeNodeからMermaid記法への変換
-  const convertToMermaid = (nodes: TreeNode[]): string => {
-    let mermaidCode = 'graph TD\n'
+  // // TreeNodeからMermaid記法への変換
+  // const convertToMermaid = (nodes: TreeNode[]): string => {
+  //   let mermaidCode = 'graph TD\n'
     
-    const processNode = (node: TreeNode) => {
-      // ノードの定義（タイプに応じてスタイルを変更）
-      const typeLabel = 
-        node.type === 'assembly' ? 'アセンブリ' :
-        node.type === 'part' ? '部品' :
-        '材料'
+  //   const processNode = (node: TreeNode) => {
+  //     // ノードの定義（タイプに応じてスタイルを変更）
+  //     const typeLabel = 
+  //       node.type === 'assembly' ? 'アセンブリ' :
+  //       node.type === 'part' ? '部品' :
+  //       '材料'
       
-      const nodeLabel = `${node.name}<br/>${typeLabel}`
+  //     const nodeLabel = `${node.name}<br/>${typeLabel}`
       
-      // スタイルクラスの定義
-      const styleClass = 
-        node.type === 'assembly' ? 'assemblyNode' :
-        node.type === 'part' ? 'partNode' :
-        'materialNode'
+  //     // スタイルクラスの定義
+  //     const styleClass = 
+  //       node.type === 'assembly' ? 'assemblyNode' :
+  //       node.type === 'part' ? 'partNode' :
+  //       'materialNode'
       
-      mermaidCode += `  ${node.id}["${nodeLabel}"]:::${styleClass}\n`
+  //     mermaidCode += `  ${node.id}["${nodeLabel}"]:::${styleClass}\n`
       
-      // 子ノードへの接続
-      node.children.forEach(child => {
-        mermaidCode += `  ${node.id} --> ${child.id}\n`
-        processNode(child)
-      })
-    }
+  //     // 子ノードへの接続
+  //     node.children.forEach(child => {
+  //       mermaidCode += `  ${node.id} --> ${child.id}\n`
+  //       processNode(child)
+  //     })
+  //   }
     
-    nodes.forEach(node => processNode(node))
+  //   nodes.forEach(node => processNode(node))
     
-    // スタイル定義
-    mermaidCode += '\n  classDef assemblyNode fill:#dbeafe,stroke:#93c5fd,stroke-width:2px,color:#1e40af\n'
-    mermaidCode += '  classDef partNode fill:#dcfce7,stroke:#86efac,stroke-width:2px,color:#166534\n'
-    mermaidCode += '  classDef materialNode fill:#fed7aa,stroke:#fdba74,stroke-width:2px,color:#9a3412\n'
+  //   // スタイル定義
+  //   mermaidCode += '\n  classDef assemblyNode fill:#dbeafe,stroke:#93c5fd,stroke-width:2px,color:#1e40af\n'
+  //   mermaidCode += '  classDef partNode fill:#dcfce7,stroke:#86efac,stroke-width:2px,color:#166534\n'
+  //   mermaidCode += '  classDef materialNode fill:#fed7aa,stroke:#fdba74,stroke-width:2px,color:#9a3412\n'
     
-    return mermaidCode
-  }
+  //   return mermaidCode
+  // }
 
-  // Mermaidダイアグラムのレンダリング
-  useEffect(() => {
-    const renderDiagram = async () => {
-      if (mermaidRef.current && data.length > 0) {
-        const mermaidCode = convertToMermaid(data)
+  // // Mermaidダイアグラムのレンダリング
+  // useEffect(() => {
+  //   const renderDiagram = async () => {
+  //     if (mermaidRef.current && data.length > 0) {
+  //       const mermaidCode = convertToMermaid(data)
         
-        try {
-          mermaidRef.current.innerHTML = ''
-          const uniqueId = `mermaid-${Date.now()}`
-          const { svg } = await mermaid.render(uniqueId, mermaidCode)
-          mermaidRef.current.innerHTML = svg
-        } catch (error) {
-          console.error('Mermaid rendering error:', error)
-          mermaidRef.current.innerHTML = `<div class="text-red-600 p-4">図の描画に失敗しました</div>`
-        }
-      }
-    }
+  //       try {
+  //         mermaidRef.current.innerHTML = ''
+  //         const uniqueId = `mermaid-${Date.now()}`
+  //         const { svg } = await mermaid.render(uniqueId, mermaidCode)
+  //         mermaidRef.current.innerHTML = svg
+  //       } catch (error) {
+  //         console.error('Mermaid rendering error:', error)
+  //         mermaidRef.current.innerHTML = `<div class="text-red-600 p-4">図の描画に失敗しました</div>`
+  //       }
+  //     }
+  //   }
     
-    renderDiagram()
-  }, [data])
+  //   renderDiagram()
+  // }, [data])
 
   return (
     <div className="w-full bg-gradient-to-br from-slate-50 to-blue-50 rounded-lg p-8 overflow-auto">
-      <div ref={mermaidRef} className="flex justify-center min-h-[400px]" />
+      <div className="flex justify-center items-center min-h-[400px] text-muted-foreground">
+        組織図ビュー（Mermaid）は一時的に無効化されています
+      </div>
     </div>
   )
 }
@@ -793,11 +791,7 @@ export function TreeStructure() {
             ) : (
               <div className={`overflow-x-auto overflow-y-auto pb-8 ${isFullscreen ? "max-h-[calc(100vh-12rem)]" : ""}`}>
                 <div className="min-w-max p-8">
-                  <OrgChartView
-                    data={treeData}
-                    onDelete={deleteNode}
-                    onAddChild={addChild}
-                  />
+                  <OrgChartView />
                 </div>
               </div>
             )}

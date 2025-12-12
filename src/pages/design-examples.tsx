@@ -1,4 +1,4 @@
-import { useMemo, useState, lazy, Suspense } from "react"
+import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -15,8 +15,8 @@ import { KanbanBoard } from "@/components/kanban-board"
 import { ChartDashboard } from "@/components/chart-dashboard"
 import { StatsCards, SearchFilterGallery } from "@/components/gallery-components"
 
-// TreeStructureを遅延ロード（mermaid/cytoscapeを含むため）
-const TreeStructure = lazy(() => import("@/components/tree-structure"))
+// TEMPORARILY DISABLED: TreeStructureを遅延ロード（mermaid/cytoscapeを含むため）
+// const TreeStructure = lazy(() => import("@/components/tree-structure"))
 import type { GalleryItem, FilterConfig } from "@/components/search-filter-gallery"
 import { ListTable } from "@/components/list-table"
 import type { TableColumn } from "@/components/list-table"
@@ -1012,7 +1012,9 @@ export default function DesignShowcasePage() {
 
       <GanttChart />
 
+      {/* TEMPORARILY DISABLED: TreeStructure コンポーネント（Mermaid依存のため一時的に無効化） */}
       {/* デザインテンプレート: ツリー構造 */}
+      {/* 
       <div className="space-y-3" id="tree">
         <div className="space-y-2">
           <h2 className="text-xl font-semibold text-foreground">🌳 ツリー構造（BOM例）</h2>
@@ -1044,6 +1046,7 @@ export default function DesignShowcasePage() {
       }>
         <TreeStructure />
       </Suspense>
+      */}
 
       </main>
       </div>
