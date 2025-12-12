@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite'
-import path from 'path'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import { powerApps, POWER_APPS_CORS_ORIGINS } from './plugins/plugin-power-apps';
+import { defineConfig } from "vite";
+import path from "path";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import { powerApps, powerAppsCorsOrigins } from "./plugins/plugin-power-apps";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -16,7 +16,7 @@ export default defineConfig({
     port: 3000,
     host: "::",
     cors: {
-      origin: POWER_APPS_CORS_ORIGINS
+      origin: powerAppsCorsOrigins
     }
   },
   resolve: {
