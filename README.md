@@ -9,6 +9,22 @@
   [![Power Apps](https://img.shields.io/badge/Power%20Apps-Code%20Apps-blue)](https://learn.microsoft.com/power-apps/)
 </div>
 
+## Code Apps の環境を整えよう
+
+私のブログで紹介していますのでもしよろしければ。
+
+[Code Apps の開発環境を整えよう 〜プロ開発のコードで最初のアプリを作成してPower Platform にデプロイする〜
+](https://www.geekfujiwara.com/tech/powerplatform/7352/)
+
+## Xで感想などをお寄せください
+
+Xで感想をぜひお寄せください。このアプリはこちらのポストで紹介しております。
+
+https://x.com/geekfujiwara/status/2019542677851893919
+
+
+
+
 ---
 
 ## 📖 概要
