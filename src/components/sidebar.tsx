@@ -3,9 +3,8 @@ import { NavLink } from "react-router-dom"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Home,
-  BookOpen,
-  FileText,
-  Users,
+  Workflow,
+  FolderOpen,
   type LucideIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -47,19 +46,8 @@ export function Sidebar() {
       category: "アプリ",
       items: [
         { icon: Home, label: "ホーム", path: "/" },
-        { icon: FileText, label: "このテンプレートの使い方", path: "guide" },
-      ]
-    },
-    {
-      category: "サンプル実装",
-      items: [
-        { icon: BookOpen, label: "デザインサンプル", path: "design-examples" },
-      ]
-    },
-    {
-      category: "サポート",
-      items: [
-        { icon: Users, label: "フィードバック", path: "feedback" },
+        { icon: FolderOpen, label: "業務プロセス", path: "process-list" },
+        { icon: Workflow, label: "デザイナー", path: "process-editor" },
       ]
     },
   ]
@@ -222,7 +210,7 @@ export function Sidebar() {
             {!isCollapsed ? (
               <>
                 <p className="font-semibold text-foreground">バージョン 1.0.0</p>
-                <p>© 2025 Geek Fujiwara</p>
+                <p>© {new Date().getFullYear()} Geek Fujiwara</p>
               </>
             ) : (
               <p className="font-semibold text-foreground">v1.0</p>

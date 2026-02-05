@@ -54,10 +54,10 @@ function LayoutContent({ showHeader = true }: LayoutProps) {
               </Button>
               <div>
                 <h1 className="text-lg font-bold text-primary">
-                  Code Apps Starter
+                  業務プロセスデザイナー
                 </h1>
                 <p className="text-xs text-muted-foreground hidden sm:block">
-                  Power Apps Code Apps
+                  Business Process Designer
                 </p>
               </div>
             </div>
@@ -88,9 +88,9 @@ function LayoutContent({ showHeader = true }: LayoutProps) {
         <Sidebar />
 
         {/* メインコンテンツエリア */}
-        <div className={`flex-1 flex flex-col transition-all duration-300 relative z-0 ${isCollapsed ? 'md:ml-16' : 'md:ml-64'}`}>
-          <main className="flex-1 flex flex-col overflow-visible">
-            <div className="flex-1 p-6 max-w-full">
+        <div className={`flex-1 flex flex-col transition-all duration-300 relative z-0 overflow-hidden ${isCollapsed ? 'md:ml-16' : 'md:ml-64'}`}>
+          <main className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-hidden">
               <Outlet />
             </div>
           </main>

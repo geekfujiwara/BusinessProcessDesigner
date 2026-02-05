@@ -4,9 +4,8 @@ import Layout from "@/pages/_layout"
 import HomePage from "@/pages/home"
 
 // 大きなページを遅延読み込み
-const GuidePage = lazy(() => import("@/pages/guide"))
-const DesignShowcasePage = lazy(() => import("@/pages/design-examples"))
-const FeedbackPage = lazy(() => import("@/pages/feedback"))
+const ProcessListPage = lazy(() => import("@/pages/process-list"))
+const ProcessEditorPage = lazy(() => import("@/pages/process-editor"))
 const NotFoundPage = lazy(() => import("@/pages/not-found"))
 
 // ローディングコンポーネント
@@ -40,9 +39,8 @@ export const router = createBrowserRouter([
     errorElement: withSuspense(NotFoundPage),
     children: [
       { index: true, element: <HomePage /> },
-      { path: "guide", element: withSuspense(GuidePage) },
-      { path: "design-examples", element: withSuspense(DesignShowcasePage) },
-      { path: "feedback", element: withSuspense(FeedbackPage) },
+      { path: "process-list", element: withSuspense(ProcessListPage) },
+      { path: "process-editor", element: withSuspense(ProcessEditorPage) },
     ],
   },
 ], {

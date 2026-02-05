@@ -154,7 +154,7 @@ export function HamburgerMenu() {
           <div className="border-t border-border p-4">
             <div className="text-xs text-muted-foreground text-center">
               <p className="font-semibold text-foreground mb-1">Code Apps Starter</p>
-              <p>© 2025 Geek Fujiwara</p>
+              <p>© {new Date().getFullYear()} Geek Fujiwara</p>
             </div>
           </div>
         </div>

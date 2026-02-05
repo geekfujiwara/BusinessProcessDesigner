@@ -22,6 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.cursor/
+*_backup.*
 
 # Power Apps environment configuration
 power.config.json
+
+# Power SDK generated files (auto-generated, can be regenerated)
+.power/schemas/
