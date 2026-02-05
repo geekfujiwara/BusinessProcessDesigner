@@ -4,6 +4,7 @@ import { useFlowchartStore } from '@/stores/flowchart-store';
 import { SwimlaneDiagram } from '@/components/business-process/swimlane-diagram';
 import { ProcessEditorPanel } from '@/components/business-process/process-editor-panel';
 import { parseProcessMarkdown, exportProcessToMarkdown, SAMPLE_MARKDOWN } from '@/components/business-process/markdown-parser';
+import { COPILOT_PROMPT } from '@/components/copilot-prompt-button';
 import { Geek_businessprocessesService } from '@/generated';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -259,94 +260,9 @@ export default function ProcessEditorPage() {
   
   // Copilotプロンプトをクリップボードにコピー
   const handleCopyCopilotPrompt = useCallback(() => {
-    const prompt = `あなたは業務プロセス設計の専門家です。
-私の代わりに、提供された業務プロセス情報を解析して、システム統合図を作成してください。
-
-# ルール
-1. 必ずマークダウン形式で出力してください
-2. プロセスIDは必ず #P形式（例: #P1, #P2）で記述してください
-3. 行番号は必ず #L形式（例: #L1, #L2）でプロセス行の先頭に記述してください
-4. 同じ行に複数のプロセスがある場合は、同じ #L番号を使用してください
-5. プロセス行は「#P[番号] #L[行番号] [部門名] [プロセス内容]」の形式で記述してください
-6. プロセス間の接続は「Next:」「Yes:」「No:」で明記してください（ハイフンなし）
-7. 各セクション（Dept, Process, Reports, Systems）は明確に分けてください
-8. ReportsとSystemsは「[名前] #L: [行番号のリスト]」の形式で記述してください
-
-# マークダウン形式の例
-\`\`\`markdown
-# BusinessProcessName
-購買申請承認プロセス
-
-## Description
-従業員が物品やサービスを購入する際の申請から承認、発注、検収までの一連の業務フロー
-
-## Dept
-申請者
-総務部
-承認者
-経理部
-購買担当
-
-## Process
-#P1 #L1 申請者 開始
-Next: P2
-
-#P2 #L2 申請者 購買申請書作成
-Next: P3
-
-#P3 #L3 総務部 申請内容確認
-Yes: P4
-No: P2
-
-#P4 #L4 経理部 予算確認
-Yes: P5
-No: P6
-
-#P5 #L5 承認者 一次承認
-Next: P7
-
-#P6 #L5 申請者 申請内容修正
-Next: P3
-
-#P7 #L6 経理部 金額判定
-Yes: P8
-No: P9
-
-#P8 #L7 承認者 最終承認
-Next: P9
-
-#P9 #L8 購買担当 発注処理
-Next: P10
-
-#P10 #L10 購買担当 納品確認
-Next: P11
-
-#P11 #L11 経理部 検収完了
-Next: P12
-
-#P12 #L12 経理部 完了
-
-## Reports
-購買申請書 #L: 2
-予算確認書 #L: 4
-承認記録 #L: 5, 7
-発注書 #L: 8
-検収書 #L: 11
-
-## Systems
-購買管理システム #L: 2, 8, 10, 11
-予算管理システム #L: 4
-承認ワークフロー #L: 5, 7
-\`\`\`
-
-上記のルールに従って、以下の業務プロセスをマークダウン形式で出力してください。
-
-# 業務プロセス情報
-[ここに業務プロセスの説明や要件を記述してください]`;
-    
-    navigator.clipboard.writeText(prompt)
+    navigator.clipboard.writeText(COPILOT_PROMPT)
       .then(() => {
-        toast.success('Copilotプロンプトをクリップボードにコピーしました');
+        toast.success('M365 Copilot用プロンプトをコピーしました');
       })
       .catch((error) => {
         console.error('コピーエラー:', error);

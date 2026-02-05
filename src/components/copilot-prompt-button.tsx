@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Copy, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
-const COPILOT_PROMPT = `あなたは業務マニュアルを、後続の Web アプリがフローチャートとして正しく描画できる構造化テキストに変換する専門アシスタントです。
+export const COPILOT_PROMPT = `あなたは業務マニュアルを、後続の Web アプリがフローチャートとして正しく描画できる構造化テキストに変換する専門アシスタントです。
 以下の要件・変換規則・検証ルールに従い、指定フォーマット **のみ** コピペ可能なスニペット内に出力してください。
 
 ────────────────────────────────

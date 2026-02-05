@@ -1,8 +1,0 @@
-Display Name,Name,Data Type,Required,Description,Max Length,Sample Data
-スイムレーンID,cr_swimlaneid,Unique Identifier,Yes,スイムレーンの一意識別子,,660e8400-e29b-41d4-a716-446655440001
-業務プロセス,cr_businessprocessid,Lookup,Yes,親となる業務プロセス(BusinessProcess),,購買申請承認フロー
-スイムレーン名,cr_name,Single Line of Text,Yes,スイムレーン（担当部門）の名称,100,経理部 - 申請者
-表示順序,cr_displayorder,Whole Number,Yes,スイムレーンの表示順序,,1
-背景色,cr_color,Single Line of Text,No,スイムレーンの背景色(HEX),7,#E8F5E9
-作成日時,createdon,Date and Time,Yes,レコード作成日時,,2024-01-01T09:00:00Z
-更新日時,modifiedon,Date and Time,Yes,レコード更新日時,,2024-01-01T09:00:00Z
