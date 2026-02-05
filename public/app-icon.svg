@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 背景 -->
+  <rect width="200" height="200" rx="20" fill="#0078D4"/>
+  
+  <!-- グリッド背景 -->
+  <defs>
+    <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="200" height="200" fill="url(#grid)"/>
+  
+  <!-- メインフローチャート要素 -->
+  <!-- 開始ノード -->
+  <ellipse cx="100" cy="40" rx="30" ry="15" fill="#81C784" stroke="#ffffff" stroke-width="2"/>
+  <text x="100" y="45" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="bold">開始</text>
+  
+  <!-- プロセスノード1 -->
+  <rect x="70" y="70" width="60" height="25" rx="3" fill="#4DB6AC" stroke="#ffffff" stroke-width="2"/>
+  <text x="100" y="87" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="bold">プロセス1</text>
+  
+  <!-- 判断ノード -->
+  <path d="M 100 115 L 130 135 L 100 155 L 70 135 Z" fill="#ffffff" stroke="#0078D4" stroke-width="2"/>
+  <text x="100" y="140" text-anchor="middle" fill="#0078D4" font-size="9" font-weight="bold">判断</text>
+  
+  <!-- プロセスノード2 -->
+  <rect x="30" y="170" width="50" height="20" rx="3" fill="#4DB6AC" stroke="#ffffff" stroke-width="2"/>
+  <text x="55" y="183" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="bold">処理A</text>
+  
+  <!-- プロセスノード3 -->
+  <rect x="110" y="170" width="50" height="20" rx="3" fill="#4DB6AC" stroke="#ffffff" stroke-width="2"/>
+  <text x="135" y="183" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="bold">処理B</text>
+  
+  <!-- 接続線 -->
+  <path d="M 100 55 L 100 70" stroke="#ffffff" stroke-width="2" fill="none"/>
+  <path d="M 100 95 L 100 115" stroke="#ffffff" stroke-width="2" fill="none"/>
+  <path d="M 70 135 L 55 135 L 55 170" stroke="#ffffff" stroke-width="2" fill="none"/>
+  <path d="M 130 135 L 135 135 L 135 170" stroke="#ffffff" stroke-width="2" fill="none"/>
+  
+  <!-- 矢印 -->
+  <polygon points="100,70 97,65 103,65" fill="#ffffff"/>
+  <polygon points="100,115 97,110 103,110" fill="#ffffff"/>
+  <polygon points="55,170 52,165 58,165" fill="#ffffff"/>
+  <polygon points="135,170 132,165 138,165" fill="#ffffff"/>
+  
+  <!-- ドキュメントアイコン（右下） -->
+  <g transform="translate(150, 150)">
+    <path d="M 5 0 L 35 0 L 35 30 Q 25 27 20 30 Q 15 33 5 30 Z" fill="#90CAF9" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="10" y1="8" x2="30" y2="8" stroke="#ffffff" stroke-width="1"/>
+    <line x1="10" y1="14" x2="30" y2="14" stroke="#ffffff" stroke-width="1"/>
+    <line x1="10" y1="20" x2="25" y2="20" stroke="#ffffff" stroke-width="1"/>
+  </g>
+</svg>
