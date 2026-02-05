@@ -74,7 +74,7 @@
 
 ### ステップ1: ソリューションのダウンロード
 
-1. GitHubの[Releases](https://github.com/geekfujiwara/CodeAppsStarter/releases)ページにアクセス
+1. GitHubの[Releases](https://github.com/geekfujiwara/BusinessProcessDesigner/releases)ページにアクセス
 2. 最新バージョンのソリューションファイル（`.zip`）をダウンロード
 
 ### ステップ2: Power Appsへのインポート
@@ -146,7 +146,7 @@
 
 ```powershell
 # リポジトリをクローン
-git clone https://github.com/geekfujiwara/CodeAppsStarter.git
+git clone https://github.com/geekfujiwara/BusinessProcessDesigner.git
 cd BusinessProcessEditer
 
 # 依存関係をインストール
@@ -228,7 +228,7 @@ BusinessProcessEditer/
 
 ### 問題を報告する
 
-バグや機能要望がある場合は、[GitHub Issues](https://github.com/geekfujiwara/CodeAppsStarter/issues)で報告してください。
+バグや機能要望がある場合は、[GitHub Issues](https://github.com/geekfujiwara/BusinessProcessDesigner/issues)で報告してください。
 
 ### コントリビューション
 
