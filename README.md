@@ -116,6 +116,8 @@ https://github.com/user-attachments/assets/37e0e74f-8fb1-4c74-ac06-f40fdedfc741
 
 <img width="741" height="229" alt="image" src="https://github.com/user-attachments/assets/fc23a81b-9020-466b-b7cb-5cf66e5424ac" />
 
+※ 有効になるのに15分程度かかる場合があります。
+
 [詳細は Microsoft にガイダンス資料](https://learn.microsoft.com/ja-jp/power-apps/developer/code-apps/)があります。
 
 ---
