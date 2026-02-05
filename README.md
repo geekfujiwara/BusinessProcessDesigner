@@ -1,95 +1,22 @@
-﻿# Power Apps Code Apps 開発テンプレート
+﻿# 業務プロセスエディタ (Business Process Editor)
 
-**Vite + TypeScript + React** を使用した Power Apps コードアプリ開発用のモダンなスターターテンプレートです。
+**Vite + TypeScript + React + Dataverse** を使用した業務プロセス設計・管理アプリケーション
 
-<img width="1912" height="924" alt="image" src="https://github.com/user-attachments/assets/3942364a-4ed1-49fd-b72b-b1d0b71934b0" />
-
-
-Microsoft Learn Catalog API データをサンプルとして活用し、ダッシュボード、フォーム、ギャラリー、フィルター、カード表示などの実装パターンを紹介します。
-
-
-
+Power Apps Code Apps として実装された、業務プロセスを視覚的に設計・管理できるWebアプリケーションです。
 
 ---
 
-##  主な特徴
+## 主な特徴
 
-- **モダンなツール** - Vite、TypeScript、React を採用
-- **すぐに使えるスタイリング** - Tailwind CSS、shadcn/ui コンポーネント、テーマ機能を標準装備
-- **サンプル実装** - Learn API データを活用したギャラリー、フォーム、フィルター、カード表示の実装例
-- **API 連携パターン** - React Query を使用したデータフェッチとキャッシングの実装例
-- **標準パターン** - 業界標準のパターンとベストプラクティス
-- **AI エージェントフレンドリー** - コーディングエージェントでの使用に最適化
-- **日本語UI** - 日本語でのユーザーインターフェース
-- **レスポンシブデザイン** - モバイル対応のサイドバーナビゲーション
-- **使い方ガイド** - GitHub Copilot との連携方法を含む詳細なガイド
-
-
-
-
-https://github.com/user-attachments/assets/d9cef0e8-91ca-41ea-b40f-5f342dd98a13
-
-
-
----
-
-## サンプル実装
-
-このテンプレートには、Microsoft Learn Catalog API を活用した以下のサンプル実装が含まれています:
-
-### 🎨 ギャラリー&フィルター実装
-
-- 検索機能付きアイテムギャラリー
-- 複数条件フィルタリング (ロール、プロダクト、レベル)
-- ページネーション
-- レスポンシブグリッドレイアウト
-
-<img width="1974" height="1035" alt="image" src="https://github.com/user-attachments/assets/66c8ef26-fa6d-451c-a0c8-333a5f390384" />
-
-<img width="1953" height="686" alt="image" src="https://github.com/user-attachments/assets/39dc9a75-f0d7-4944-91fb-a26092646ff0" />
-
-
-### 📝 フォーム実装
-
-- モーダルベースのフォーム
-- API データを活用した動的フォームフィールド
-- バリデーションとエラーハンドリング
-
-<img width="913" height="844" alt="image" src="https://github.com/user-attachments/assets/ff0d712b-74e9-4757-a632-9bc820be3e0a" />
-
-
-### 📊 ダッシュボード実装
-
-- 統計カード表示
-- データの集計と可視化
-- カードベースのレイアウト
-
-<img width="1890" height="1068" alt="image" src="https://github.com/user-attachments/assets/5a99c6b2-6814-4568-8ae0-c64644d6b79e" />
-
-### 🎴 カード表示実装
-
-
-- Learn データを活用したカードコンポーネント
-- バッジとメタデータ表示
-- 外部リンク確認モーダル
-
-<img width="1561" height="357" alt="image" src="https://github.com/user-attachments/assets/501d9e8e-48d1-43e6-b362-cbaae9c3d1e6" />
-
-### 🎯 タスク優先順位管理
-ドラッグ&ドロップでタスクの並び順を変更できるインタラクティブなリスト
-
-<img width="1947" height="1282" alt="image" src="https://github.com/user-attachments/assets/c7737f0c-4388-426c-94af-ee57391e9116" />
-
-### 📋 カンバンボード
-タスクをドラッグ&ドロップでステータス間を移動できるカンバンビュー
-
-<img width="1949" height="1142" alt="image" src="https://github.com/user-attachments/assets/108dc6cf-cd0d-4fa4-b9f4-18f563501c26" />
-
-
-### 📅 ガントチャート
-タスクをドラッグで移動、ハンドルで期間変更できるインタラクティブなガントチャート
-
-<img width="2037" height="1317" alt="image" src="https://github.com/user-attachments/assets/5854895c-1ec6-43f9-b274-7e75982f0f18" />
+- **📊 Swimlaneダイアグラム** - 部門ごとに整理された視覚的なフロー図
+- **🎯 ビジュアルエディタ** - ドラッグ&ドロップでプロセスを設計
+- **📝 マークダウン対応** - テキストベースでの編集とインポート/エクスポート
+- **💾 Dataverse統合** - Power Platformとのシームレスな連携
+- **🤖 M365 Copilot対応** - AIによる業務プロセス自動生成
+- **🎨 モダンUI** - shadcn/ui、Tailwind CSSを活用した洗練されたデザイン
+- **📱 レスポンシブ** - デスクトップ、タブレット、モバイル対応
+- **🌙 ダークモード** - 目に優しいダークテーマ対応
+- **🔒 エンタープライズ対応** - Dataverseによるセキュアなデータ管理
 
 ---
 
@@ -100,67 +27,195 @@ https://github.com/user-attachments/assets/d9cef0e8-91ca-41ea-b40f-5f342dd98a13
 - Node.js (最新LTS版推奨)
 - Git
 - VS Code (推奨)
-- GitHub Copilot 拡張機能 (推奨)
-- GitHub Pro / Enterprise ライセンス
-- Power Apps Premium ライセンス
+- Power Apps CLI
+- Power Apps Premium ライセンス (Dataverse利用時)
+- M365 Copilot (AI自動生成機能利用時)
 
 ### インストール
 
-```PowerShell
+```powershell
 # リポジトリをクローン
 git clone https://github.com/geekfujiwara/CodeAppsStarter.git
-cd CodeAppsStarter
-```
+cd BusinessProcessEditer
 
-```PowerShell
 # 依存関係をインストール
 npm install
-```
 
-```PowerShell
 # 開発サーバーを起動
 npm run dev
 ```
 
-ブラウザで自動的に開かれるアプリの動作を確認してください。
-
-ここまでできましたら起動された Code Apps Starter アプリ内のガイドのとおりに実行してください。
+ブラウザで `http://localhost:5173` を開いてアプリの動作を確認してください。
 
 ---
 
-## テンプレートの使い方
+## Dataverse設定
 
-このテンプレートには、GitHub Copilot を活用した効率的な開発方法を説明する詳細なガイドページが含まれています。
+### テーブル定義
 
-アプリを起動後、「このテンプレートの使い方」ページにアクセスして、以下の情報を確認できます:
+プロジェクトには以下のDataverseテーブル定義が含まれています:
 
-1. **開発環境のセットアップ** - 必要なツールとセットアップコマンド
-2. **Power Apps へのデプロイ準備** - `pac code init` コマンドの使い方
-3. **開発標準の活用方法** - GitHub Copilot との連携方法
+- **BusinessProcess (geek_businessprocesses)** - 業務プロセスのメインテーブル
+  - プロセス名、説明、マークダウン定義、関連ドキュメントURL等
+  
+詳細なテーブル定義は `dataverse-tables/` フォルダを参照してください。
 
-詳細な開発標準については、[CodeAppsDevelopmentStandard](https://github.com/geekfujiwara/CodeAppsDevelopmentStandard) リポジトリを参照してください。
+### 環境構築
+
+```powershell
+# Power Apps環境の初期化
+pac code init -n "Business Process Editor" -env <your-environment-id>
+
+# Dataverseデータソースの追加
+pac code add-data-source -a "dataverse" -t "geek_businessprocesses"
+```
 
 ---
 
-## 機能
+## 使い方
 
-### 実装済みの機能
+### 1. 新規プロセス作成
 
-- **サンプル実装** - Learn API を活用したギャラリー、フォーム、フィルター、カード表示の実装例
-- **API 連携** - React Query を使用したデータフェッチとキャッシング
-- **ダークモード対応** - システム設定に合わせた自動切り替え
-- **レスポンシブデザイン** - モバイル、タブレット、デスクトップに対応
-- **サイドバーナビゲーション** - コラップス可能なナビゲーション
-- **リンク確認モーダル** - 外部リンクを開く前の確認ダイアログ
-- **使い方ガイド** - GitHub Copilot 連携ガイドとURL コピー機能
-- **日本語ローカライゼーション** - 完全な日本語UI
+#### 方法A: マークダウンから作成（M365 Copilot利用）
 
-### ダッシュボード
+1. ホーム画面で「M365 Copilotでプロセスを作成」カードを選択
+2. プロンプトをコピー
+3. M365 Copilotに業務マニュアル（Word/PDF等）を添付してプロンプトを送信
+4. 生成されたマークダウンをコピー
+5. デザイナー画面で「マークダウン読込」からインポート
 
-- 統計カードによるデータ可視化
-- 人気モジュールのハイライト表示
-- フォーム実装サンプル
-- カード表示サンプル
+#### 方法B: 手動で作成
+
+1. デザイナー画面で「新規作成」をクリック
+2. サイドパネルでスイムレーン（担当部門）を追加
+3. ノード（プロセスステップ）を追加
+4. ノード間の接続を設定
+5. 関連システムと帳票を追加
+
+### 2. プロセスの編集
+
+- **ビジュアルタブ**: Swimlaneダイアグラムで視覚的に編集
+- **マークダウンタブ**: テキストベースで直接編集
+- サイドパネルでノード、スイムレーン、システム、帳票を管理
+
+### 3. プロセスの保存
+
+- 「Dataverseに保存」ボタンでPower Platformに保存
+- 自動的にバージョン管理され、変更履歴が記録されます
+
+### 4. プロセスの閲覧・管理
+
+- プロセス一覧画面で登録済みプロセスを検索・閲覧
+- カードをクリックして編集、削除が可能
+
+---
+
+## 技術スタック
+
+### フロントエンド
+- React 18
+- TypeScript
+- Vite
+- React Router
+- Zustand (状態管理)
+- TanStack Query (データフェッチ)
+
+### UI/UX
+- Tailwind CSS
+- shadcn/ui
+- Lucide Icons
+- Sonner (トースト通知)
+
+### Power Platform統合
+- Power Apps Code CLI
+- Dataverse REST API
+- Power Apps SDK
+
+---
+
+## プロジェクト構成
+
+```
+BusinessProcessEditer/
+├── src/
+│   ├── components/
+│   │   ├── business-process/    # プロセスエディタコンポーネント
+│   │   │   ├── swimlane-diagram.tsx
+│   │   │   ├── process-editor-panel.tsx
+│   │   │   ├── markdown-parser.ts
+│   │   │   └── nodes/           # ノード型コンポーネント
+│   │   ├── ui/                  # shadcn/uiコンポーネント
+│   │   └── copilot-prompt-button.tsx
+│   ├── pages/
+│   │   ├── home.tsx
+│   │   ├── process-list.tsx
+│   │   └── process-editor.tsx
+│   ├── stores/
+│   │   └── flowchart-store.ts   # Zustand状態管理
+│   ├── types/
+│   │   └── flowchart.ts
+│   └── generated/               # Power SDK自動生成コード
+├── dataverse-tables/            # Dataverseテーブル定義
+└── .power/                      # Power Apps設定
+```
+
+---
+
+## 開発ガイド
+
+### ローカル開発
+
+```powershell
+npm run dev
+```
+
+### ビルド
+
+```powershell
+npm run build
+```
+
+### Power Appsへのデプロイ
+
+```powershell
+npm run build
+pac code push
+```
+
+---
+
+## マークダウンフォーマット仕様
+
+業務プロセスは以下のマークダウンフォーマットで記述できます:
+
+```markdown
+# BusinessProcessName
+{プロセス名}
+
+## Description
+{プロセスの説明}
+
+## Dept
+{部門1}
+{部門2}
+...
+
+## Process
+#P{番号} #L{行番号} {部門} {ステップ名}
+Next: P{次のステップ番号}
+
+#P{番号} #L{行番号} {部門} {判断ステップ名}
+Yes: P{承認時の次ステップ}
+No: P{却下時の次ステップ}
+
+## Reports
+{帳票名} #L: {関連行番号}, {関連行番号}, ...
+
+## Systems
+{システム名} #L: {関連行番号}, {関連行番号}, ...  
+```
+
+詳細は `src/components/business-process/markdown-parser.ts` を参照してください。
 
 ---
 
@@ -189,4 +244,4 @@ MIT License
 
 ## 謝辞
 
-このテンプレートは、Microsoft の [Power Apps Code Apps](https://github.com/microsoft/PowerAppsCodeApps) プロジェクトをベースに、日本語環境と開発標準を統合したものです。
+このアプリケーションは、Microsoft の [Power Apps Code Apps](https://github.com/microsoft/PowerAppsCodeApps) プロジェクトをベースに開発されています。
