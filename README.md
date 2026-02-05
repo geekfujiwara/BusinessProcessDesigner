@@ -105,6 +105,19 @@ https://github.com/user-attachments/assets/37e0e74f-8fb1-4c74-ac06-f40fdedfc741
 
 > **📖 詳しい手順**: [ソリューションのインポート方法（Microsoft公式ドキュメント）](https://learn.microsoft.com/ja-jp/power-apps/maker/data-platform/import-update-export-solutions)
 
+### 実行時のエラー
+このようなエラーが発生したら環境で Code Apps が有効になっていません。
+
+<img width="1672" height="386" alt="image" src="https://github.com/user-attachments/assets/275b1678-669d-4dcc-987c-0ea941b49d39" />
+
+その場合は、 [Power Platform 管理センター](https://admin.powerplatform.microsoft.com/)を開き環境で有効にしてください。
+
+管理 > 環境 > 設定 > 製品 > 機能 から設定できます。
+
+<img width="741" height="229" alt="image" src="https://github.com/user-attachments/assets/fc23a81b-9020-466b-b7cb-5cf66e5424ac" />
+
+[詳細は Microsoft にガイダンス資料](https://learn.microsoft.com/ja-jp/power-apps/developer/code-apps/)があります。
+
 ---
 
 ## 📱 使い方
