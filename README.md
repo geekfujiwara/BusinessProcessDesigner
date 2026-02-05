@@ -34,7 +34,31 @@
 
 ---
 
-## 🎯 前提条件
+## � デモ動画とスクリーンショット
+
+### アプリケーション画面
+
+<div align="center">
+  <img src="docs/screenshot.png" alt="業務プロセスデザイナー画面" width="800">
+</div>
+
+### デモ動画
+
+#### 基本的な使い方
+
+https://github.com/geekfujiwara/BusinessProcessDesigner/assets/96101315/demo-basic.mp4
+
+M365 Copilotとの連携や基本的な編集機能のデモです。
+
+#### ドキュメントからフローを生成
+
+https://github.com/geekfujiwara/BusinessProcessDesigner/assets/96101315/demo-document-to-flow.mp4
+
+業務マニュアルからM365 Copilotで自動的に業務プロセスを生成する方法を紹介します。
+
+---
+
+## �🎯 前提条件
 
 このアプリケーションを利用するには、以下が必要です：
 
